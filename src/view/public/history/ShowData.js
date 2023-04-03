@@ -114,14 +114,16 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
                       <td>{item.authorities_id}</td>
                       <td>{item.questionaire_id}</td>
                     <td>
+                       
                         <button
-                          className="btn btn-primary"
-                        //   onClick={() => {
-                        //     // loadEdit(item.id);
-                        //   }}
-                        >
-                          ประเมินคะแนน
-                        </button>{" "}
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => {
+                        navigate('/questionnaire', { state: item.id });
+                      }}
+                    >
+                    ประเมินความพึงพอใจ
+                    </button>
                       </td>
                     </tr>
                   );

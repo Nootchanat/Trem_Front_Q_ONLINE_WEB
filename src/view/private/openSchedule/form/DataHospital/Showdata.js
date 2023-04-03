@@ -21,12 +21,16 @@ function ShowData({ data, pagin, changePage, changePageSize }) {
       .get("https://json-six-lac.vercel.app/hospital")
       .then((res) => {
         console.log(res.data);
-        setEmpData(res.data);
+        setEmpData(res.data[0]);
       })
       .catch((err) => {
         //console.log(err);
       });
   }, []);
+
+  const loadEdit =(Id) => {
+    navigate("/admin/hospital/form"+Id)
+  }
 
 //   const print = useReactToPrint({
 //     content: () => componentRef.current,
@@ -55,6 +59,8 @@ function ShowData({ data, pagin, changePage, changePageSize }) {
       <div className="overflow-auto">
         <table className="table">
           <thead>
+            {/* แก้ตารางใหม่  ดึงข้อมูลพอดี แล้วไปเรียกตรง detail ***เห็นข้อมูลอะไรไปสำคัญ
+            ทำเป็นการ์ดไปเลย เอาตารางออก*/}
             <tr className="table-success">
               <th scope="col" style={{ width: '5%' }}>
               ลำดับที่
@@ -81,7 +87,7 @@ function ShowData({ data, pagin, changePage, changePageSize }) {
               อำเภอ
               </th>
               <th scope="col" style={{ width: '5%' }}>
-            จังหวัด
+             จังหวัด
               </th>
               <th scope="col" style={{ width: '5%' }}>
                 รหัสไปรษณีย์
@@ -100,6 +106,7 @@ function ShowData({ data, pagin, changePage, changePageSize }) {
           <tbody className="td">
               {empData &&
                 empData.map((item) => {
+                  console.log(item);
                   return (
                     <tr key={item.id}>
                       <td>{item.id}</td>
@@ -119,7 +126,8 @@ function ShowData({ data, pagin, changePage, changePageSize }) {
                       type="button"
                       className="btn btn-warning text-white mx-1 mt-1"
                       onClick={() => {
-                        navigate('/admin/hospital/form', { state: item.id });
+                        navigate('/admin/hospital/form/' + item.id , { state: item.id });
+
                       }}
                     >
                       <i className="fa-solid fa-pen-to-square"></i>

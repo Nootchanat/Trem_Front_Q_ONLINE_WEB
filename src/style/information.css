@@ -1,0 +1,28 @@
+
+.card2{
+    width: 800px;
+    height: 950px;
+    margin-left: 350px;
+    background-color: white;
+    
+}
+
+.btn2{
+    justify-content: center;
+    margin-left: 300px;
+    width: 100px;
+}
+
+
+
+.img-h{
+    margin-top: 15px;
+    margin-left: 65px;
+    justify-content: center;
+    margin-bottom: 30px;
+    width: 500px;
+}
+
+.container-info{
+    display: contents;
+}

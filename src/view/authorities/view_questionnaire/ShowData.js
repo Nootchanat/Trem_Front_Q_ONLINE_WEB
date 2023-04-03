@@ -82,7 +82,7 @@ function ShowData({ data, pagin, changePage, changePageSize}) {
                   return (
                     <tr key={item.id}>
                       <td>{item.id}</td>
-                      <td>{item.queue_status_id}</td>
+                      <td>{""}</td>
                       <td>{item.questionaire_name}</td>
                       <td>{item.suggestion}</td>
                     </tr>

@@ -33,6 +33,14 @@ import Home from "../layout/public/Home";
 import CheckQueue from "../view/public/queue/CheckQueue";
 import Questionaire from "../view/public/questionnaire/Questionnaire";
 import ForgetPassword from '../view/public/editProfile/ForgetPassword';
+import Calendars from "../view/public/Calendars";
+import Maininformation from "../view/public/information/Maininformation";
+import ShowDepartment from '../view/public/Department/ShowDepartment'
+import ShowDepartmentAll from "../view/public/Department/ShowDepartmentAll";
+import Dental from "../view/public/Department/DetailDepartment/dental/Dental";
+import CommonDisease from "../view/public/Department/DetailDepartment/CommonDisease";
+import Heart from "../view/public/Department/DetailDepartment/Heart";
+import Pediatrics from "../view/public/Department/DetailDepartment/Pediatrics";
 //Authorities
 import MainBookAuthor from "../view/authorities/book/MainBookAuthor";
 import MainHistoryAuthor from "../view/authorities/history/MainHistoryAuthor";
@@ -45,8 +53,9 @@ import EditPasswordAuthor from "../view/authorities/Profile/EditPasswordAuthor";
 
 
 
+
 function Router(props) {
-  const role = props.auth.role_id ? parseInt(props.auth.role_id) :  1; // 1 = admin, 0 = user, 2= authorities
+  const role = props.auth.role_id ? parseInt(props.auth.role_id) :  0; // 1 = admin, 0 = user, 2= authorities
 
   return (
     <Fragment>
@@ -62,15 +71,21 @@ function Router(props) {
                 element={<MainHistory />}
               />
               <Route path="/register" element={<FormRegister />} />
-              <Route path="/information" element={<h1>ข้อมูลทั่วไปโรงพยาบาล</h1>}/>
-              <Route path="/calendar" element={<h1>ปฏิทินการจอง</h1>} />
+              <Route path="/information" element={<Maininformation/>}/>
+              <Route path="/information/:Id" element={<Maininformation/>}/>
+              <Route path="/calendar" element={<Calendars/>} />
               <Route path="/edit-profile" element={<EditProfile />} />
               <Route path="/edit-password" element={<EditPassword />} />
               <Route path="/check-queue" element={<CheckQueue />} />
               <Route path="/Q_user" element={<Queue />} />
               <Route path="/questionnaire" element={<Questionaire/>} />
               <Route path="/forgetPassword" element={<ForgetPassword/>} />
-              <Route path="/view-history" element={<MainHistory />} />  
+              <Route path="/view-history" element={<MainHistory />} /> 
+                <Route path="/showdepartment" element={<ShowDepartment/>} />
+              <Route path="/showdepartmentAll" element={<ShowDepartmentAll/>} />
+              <Route path="/commondisease" element={<CommonDisease/>} />
+              <Route path="/detaildental" element={<Dental/>} />
+              <Route path="/detaildental/:DId" element={<Dental/>} /> 
 
               <Route path="*" element={<Redirect />} />
             </Routes>
@@ -84,6 +99,7 @@ function Router(props) {
               <Route path="/admin" element={<h1>หลังบ้าน</h1>} />
               <Route path="/admin/data-hospital" element={<MainHospital />}/>
               <Route path="/admin/hospital/form" element={<FormHospital />}/>
+              <Route path="/admin/hospital/form/:FId" element={<FormHospital />}/>
               <Route path="/admin/open-schedule"element={<MainOpenSchedule />}/>
               <Route path="/admin/open-schedule/form" element={<FormOpenSchedule />}/>
               <Route path="/admin/department-type"element={<MainDepartmentType />}/>

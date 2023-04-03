@@ -2,7 +2,7 @@ export const Menu = [
   {
     id: 0,
     title: 'ข้อมูลแผนก',
-    pathname: '/department',
+    pathname: '/showdepartmentAll',
   },
   {
     id: 2,

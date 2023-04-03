@@ -71,7 +71,7 @@ function ShowData({ data, pagin, setShow, setId, updateStatus, deleteDepartment,
         <table className="table">
           <thead>
             <tr className="table-success">
-            <th scope="col" style={{ width: '5%' }}>
+            <th scope="col" style={{ width: '10%' }}>
                 ลำดับที่
               </th>
               <th scope="col" style={{ width: '15%' }}>
@@ -111,12 +111,7 @@ function ShowData({ data, pagin, setShow, setId, updateStatus, deleteDepartment,
                     <tr key={item.id}>
                       <td>{item.id}</td>
                       <td>{item.department_name}</td>
-                      <td>
-                      {/* <img
-                        className="dpimg"
-                        src="http://apps.npru.ac.th/meeting/admin/image/20191218164836_dbceb35a54bacee67f37c445e06e723c.jpg"
-                      /> */}
-                    </td>
+                      <td><img className="img-hpt" src={item.department_image}/></td>
                       <td>{item.open_time}</td>
                       <td>{item.close_time}</td>
                       <td>{item.floor}</td>

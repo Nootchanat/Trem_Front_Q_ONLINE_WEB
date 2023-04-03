@@ -90,7 +90,7 @@ function Showdata({ data, pagin, updateStatus, deleteData, changePage, changePag
               dataQ.map((item, index) => (
                 <tr key={item.id}>
                   <td>{(pagin.currentPage - 1) * pagin.pageSize + (index + 1)}</td>
-                  <td>{item.authorities_id_card}</td>
+                  <td>{item.id_card}</td>
                   <td>{item.authorities_first_name}</td>
                   <td>{item.authorities_last_name}</td>
                   <td>{item.authorities_status}</td>             
@@ -100,7 +100,7 @@ function Showdata({ data, pagin, updateStatus, deleteData, changePage, changePag
                       type="button"
                       className="btn btn-warning text-white mx-1 mt-1"
                       onClick={() => {
-                        navigate('/admin/authorities/form', { state: item.id });
+                        navigate('/admin/form-authorities', { state: item.id });
                       }}
                     >
                       <i className="fa-solid fa-pen-to-square"></i>

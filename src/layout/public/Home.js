@@ -38,7 +38,7 @@ function Home() {
                       class="fas fa-hospital fa-2x"
                     />
 
-                    <a href="/information">ข้อมูลทั่วไปโรงพยาบาล</a>
+                    <a href={"/information"} >ข้อมูลทั่วไปโรงพยาบาล</a>
                   </div>
                 </div>
                 <div class="col-3">

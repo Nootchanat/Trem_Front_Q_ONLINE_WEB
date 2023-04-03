@@ -1,11 +1,29 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
 import { TextSelect } from '../../../../components/TextSelect';
 import PageSize from '../../../../data/pageSize.json';
 import Pagination from 'react-js-pagination';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function ShowData({ data, pagin, changePage, changePageSize, updateStatus, deleteData }) {
+  const [detail, setDetail] = useState([]);
   const navigate = useNavigate();
+
+   useEffect(() => {
+    axios
+      .get("https://json-six-lac.vercel.app/patient")
+      .then((res) => {
+        //console.log(res);
+        setDetail(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    if (detail) {
+    //   print();
+    }
+  }, [detail]);
+
   
   return (
     <div className="w-full">
@@ -46,41 +64,40 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatus, delet
               <th scope="col" style={{ width: '10%' }}>
                 เลขบัตรประชาชน
               </th>
-              <th scope="col" style={{ width: '20%' }}>
-                ชื่อ-นามสกุล
+              <th scope="col" style={{ width: '15%' }}>
+                ชื่อ
               </th>
-              <th scope="col" style={{ width: '30%' }}>
-                ที่อยู่
+              <th scope="col" style={{ width: '15%' }}>
+              นามสกุล
               </th>
               <th scope="col" style={{ width: '10%' }}>
                 เบอร์โทร
               </th>
               <th scope="col" style={{ width: '10%' }}>
-                สถานะการใช้งาน
+                โรคประจำตัว
               </th>
               <th scope="col" style={{ width: '15%' }}>
                 จัดการ
               </th>
             </tr>
           </thead>
-          <tbody>
-            {data.length === 0 ? (
+           <tbody>
+            {detail.length === 0 ? (
               <tr>
-                <td colSpan={7}>
+                <td colSpan={5}>
                   <div className="text-center text-danger">-- ไม่พบข้อมูล --</div>
                 </td>
               </tr>
             ) : (
-              data.map((item, index) => (
+              detail.map((item, index) => (
                 <tr key={item.id}>
                   <td>{(pagin.currentPage - 1) * pagin.pageSize + (index + 1)}</td>
                   <td>{item.id_card}</td>
-                  <td>{item.fullname}</td>
-                  <td>
-                    {item.address} ต.{item.subdistrict} อ.{item.district} จ.{item.province} {item.postcode}
-                  </td>
-                  <td>{item.phone_number}</td>
-                  <td>{item.is_used === 1 ? 'ใช้งาน' : 'ไม่ใช้งาน'}</td>
+                  <td>{item.first_name}</td>
+                  <td>{item.last_name}</td>
+                  <td>{item.phoneNumber}</td>
+                  <td>{item.congenital_disease}</td>
+
                   <td>
                     {/* ปุ่มแก้ไข */}
                     <button
@@ -97,7 +114,7 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatus, delet
                       type="button"
                       className={`btn text-white mx-1 mt-1 ${item.is_used === 1 ? 'btn-danger' : 'btn-success'}`}
                       onClick={() => {
-                        updateStatus(item.id, { status: item.is_used === 1 ? 0 : 1 });
+                        updateStatus(item.id, { status: item.is_used === 1 ? '0' : '1' });
                       }}
                     >
                       {item.is_used === 1 ? <i className="fa-solid fa-lock"></i> : <i className="fa-solid fa-lock-open"></i>}

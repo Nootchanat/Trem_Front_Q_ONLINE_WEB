@@ -14,7 +14,7 @@ function Questionnaire() {
       .post("https://json-six-lac.vercel.app/questionaire", {
         questionaire_name,
         suggestion,
-        queue_status_id
+        // queue_status_id
       })
       .then((res) => {
         alert("save Successfully");
@@ -81,7 +81,7 @@ function Questionnaire() {
                 }}
               ></textarea>
             </div>
-            <div className="Item">
+            <div className="Items">
               <button
 
                 type="submit"
