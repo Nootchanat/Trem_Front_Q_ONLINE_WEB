@@ -59,7 +59,7 @@ import OpenQueue from "../view/authorities/open-queue/OpenSchedule";
 
 
 function Router(props) {
-  const role = props.auth.role_id ? parseInt(props.auth.role_id) :  2; // 1 = admin, 0 = user, 2= authorities
+  const role = props.auth.role_id ? parseInt(props.auth.role_id) :  0; // 1 = admin, 0 = user, 2= authorities
 
   return (
     <Fragment>

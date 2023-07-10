@@ -28,9 +28,10 @@ function Dental() {
       try {
         const res1 = await axios.get(
           `https://json-six-lac.vercel.app/doctor/${DId}`
+          // `https://jade-uninterested-puffer.cyclic.app/apis/doctors?departmentId=${Did}`
         );
         const res2 = await axios.get(
-          `https://json-six-lac.vercel.app/department/${DId}`
+          `https://jade-uninterested-puffer.cyclic.app/apis/departments/${DId}`
         );
 
         console.log(res1);
