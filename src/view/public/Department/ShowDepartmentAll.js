@@ -24,7 +24,7 @@ function ShowDepartmentAll({}) {
                 <FontAwesomeIcon icon={faTooth} class="fa fa-tooth fa-2x" />
                 <h5 class="text-1">
                   {" "}
-                  <Link to={"/detaildental/1"}>ทันตกรรม</Link>
+                  <Link to={"/detaildental/1"}> แผลออก </Link>
                 </h5>
               </div>
             </div>

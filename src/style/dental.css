@@ -8,48 +8,31 @@
    */
   justify-content: center;
 }
-
-.doctorindepartment {}
-
-.centerdoctor {
-  justify-content: center;
-  display: flex;
-  font-size: 20px;  
+.departmentname .title-content {
+  /* Add your styles here */
 }
 
-.doctor-in-depart-card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+/* Styles for the doctor in department section */
+.doctorindepartment {
+  /* Add your styles here */
 }
 
-.card-doctor {
-  width: 400px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  margin-bottom: 20px;
-  color: rgb(31, 131, 144);
-  font-size: 24px;
-  background: aliceblue;
+/* Styles for the doctor card */
+.custom-card {
+  /* Add your styles here */
+}
+.custom-card-body {
+  /* Add your styles here */
 }
 
-.doc-img {
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
-  margin-bottom: 10px;
+.custom-card-title {
+  /* Add your styles here */
 }
 
-.depart-detail-title {
-  color: darkblue;
-  font-size: 30px;
-  font: bold;
-  
+.custom-card-text {
+  /* Add your styles here */
 }
 
-.depart-detail {
-  justify-content: flex-start;
-  white-space: normal;
+.custom-card-img {
+  /* Add your styles here */
 }
