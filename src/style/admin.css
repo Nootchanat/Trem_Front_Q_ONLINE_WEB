@@ -1,0 +1,81 @@
+
+.content .cards {
+    padding: 20px 15px;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+  }
+  .content .cards .card {
+    border-radius: 5px;
+    border: 1px solid lightblue;
+    width: 250px;
+    height: 150px;
+    background-color: lightblue;
+    margin: 0px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20ps 0 rgb(0, 0, 0, 0.19);
+  }
+  .fa-user {
+    width: 22px;
+    align-items: center;
+    
+    margin-top: 30px;
+  }
+  .count {
+    font-size: 25px;
+     margin-top: 10px;
+  
+  }
+  .fa-cal {
+    width: 20px;
+    align-items: center;
+  
+    margin-top: 30px;
+  }
+  .counts {
+    font-size: 30px;
+    margin-top: 10px;
+  
+  }
+  .fa-per {
+    width: 20px;
+    align-items: center;
+  
+    margin-top: 30px;
+  }
+  .countp {
+    font-size: 30px;
+    margin-top: 10px;
+    
+  }
+  
+  .T1 {
+    margin-right: 4px;
+  }
+  .T2 {
+    margin-left: 5px;
+  }
+  
+  .overflow {
+   margin-top: 30px;
+    width: 400px;
+    text-align: center;
+    color: #000;
+    padding: 1px;
+  
+    background-color: lightblue;
+  }
+  .ta1 {
+    color: #000;
+  
+    background-color: rgb(17, 111, 140)
+  }
+  .connd {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 10px;
+    margin-left: 280px;
+  }

@@ -1,74 +1,59 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "../../../../src/style/departmentAll.css";
-import {
-  faTooth,
-  faHeartbeat,
-  faChild,
-  faPersonPregnant,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-function ShowDepartmentAll({}) {
+import Card from "react-bootstrap/Card";
+import axios from "axios";
+
+function ShowDepartmentAll() {
+  const [departments, setDepartments] = useState([]);
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await axios.get(
+          "https://amused-ant-umbrella.cyclic.app/apis/departments"
+        );
+        console.log(response.data); // Check the response data
+        setDepartments(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
+
+  console.log(departments); // Check the value of departments
+
   return (
     <div className="w-full">
-      <div className="w-full mb-5">
-        <h2 className="title-content">แผนกในโรงพยาบาล</h2>
+      <div className="w-full mb-4">
+        <h4 className="title-content">แผนกในโรงพยาบาล</h4>
       </div>
-      <div class="departmentd">
-        <div class="row">
-          <div class="col-3">
-            <div class="card">
-              <div class="card-body">
-                <FontAwesomeIcon icon={faTooth} class="fa fa-tooth fa-2x" />
-                <h5 class="text-1">
-                  {" "}
-                  <Link to={"/detaildental/1"}> แผลออก </Link>
-                </h5>
-              </div>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="card">
-              <div class="card-body">
-                <FontAwesomeIcon
-                  icon={faHeartbeat}
-                  class="fafa-heartbeat  fa-2x"
+      <div className="container5 p-3 my-3">
+        <div className="row">
+          {departments.length > 0 ? (
+            departments.map((department) => (
+              <Card key={department.id} style={{ width: "20rem" }}>
+                <Card.Img
+                  variant="top"
+                  src={department.department_image}
+                  style={{ width: "100%", height: "70%" }}
                 />
-                <h5 class="text-2">
-                  {" "}
-                  <Link to="/detaildental/2"> หัวใจ </Link>
-                </h5>
-              </div>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="card">
-              <div class="card-body">
-                <FontAwesomeIcon icon={faChild} class="fa fa-child fa-2x" />
-                <h5 class="text-3">
-                  {" "}
-                  <Link to="/detaildental/3">กุมารเวชกรรม </Link>
-                </h5>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-3">
-            <div class="card">
-              <div class="card-body">
-                <FontAwesomeIcon
-                  icon={faPersonPregnant}
-                  class="fa fa-person-pregnant fa-2x"
-                />
-                <h5 class="text-4">
-                  {" "}
-                  <Link to="/detaildental/4">แผนกสูติ - นรีเวชกรรม </Link>
-                </h5>
-              </div>
-            </div>
-          </div>
+                <h5 className="title-content">{department.department_name}</h5>
+                <div className="button-card">
+                  <Link
+                    to={`/detaildental/${department.id}`}
+                    className="btn btn-success mx-1"
+                  >
+                    <div className="text-link1">ข้อมูลแผนก</div>
+                  </Link>
+                </div>
+              </Card>
+            ))
+          ) : (
+            <div>Loading ...</div>
+          )}
         </div>
       </div>
     </div>

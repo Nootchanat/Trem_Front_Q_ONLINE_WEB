@@ -9,19 +9,17 @@ import MainPdf from '../history/pdf/MainPdf';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
+
+
 function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, deleteData }) {
   const [dataQ, setDataQ] = useState(null);
   const [empData, setEmpData] = useState(null);
   const componentRef = useRef();
   const navigate = useNavigate();
-  const pageStyle = `
-  @page {
-    size: 4in 4in
-  }`;
-
+  
   useEffect(() => {
     axios
-      .get("https://json-six-lac.vercel.app/patient")
+      .get("https://drab-tan-bluefish-tux.cyclic.app/apis/queue")
       .then((res) => {
         //console.log(res);
         setEmpData(res.data);
@@ -41,19 +39,15 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
 //   });
 
 
-const removeEmp = (id) => {
-    if (window.confirm("คุณต้องการลบการจองคิวนี้ไหม ")) {
-      axios
-        .delete("https://json-six-lac.vercel.app/queue/" + id)
-        .then((res) => {
-          alert("ลบคิวสำเร็จ");
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
+const removeEmp =(queue_id)=>{
+  if(window.confirm("Do You Want To Delete This doctor?")){
+    axios.delete("https://drab-tan-bluefish-tux.cyclic.app/apis/queue/"+ queue_id)
+    .then((res)=>{
+      alert("Remove successfully.")
+      window.location.reload()
+    })
+  }
+}
   return (
     <div className="w-full">
       <div className="d-flex justify-content-between mb-2">
@@ -78,17 +72,25 @@ const removeEmp = (id) => {
               <th scope="col" style={{ width: '5%' }}>
               คิวที่
               </th>
-              <th scope="col" style={{ width: '25%' }}>
+              <th scope="col" style={{ width: '20%' }}>
               ชื่อผู้ป่วย
               </th>
-              <th scope="col" style={{ width: '20%' }}>
+              <th scope="col" style={{ width: '15%' }}>
               เลขบัตรประชาชน
               </th>
-              <th scope="col" style={{ width: '20%' }}>
+              <th scope="col" style={{ width: '15%' }}>
               อาการเบื้องต้น
               </th>
-              <th scope="col" style={{ width: '15%' }}>
+              <th scope="col" style={{ width: '10%' }}>
               แผนก
+              </th>
+              <th scope="col" style={{ width: '10%' }}>
+              วันที่จอง<br>
+              </br>
+              ป/ด/ว
+              </th>
+              <th scope="col" style={{ width: '10%' }}>
+              เวลาที่จอง
               </th>
               <th scope="col" style={{ width: '5%' }}>
               แก้ไข
@@ -107,11 +109,14 @@ const removeEmp = (id) => {
                 empData.map((item) => {
                   return (
                     <tr key={item.id}>
-                      <td>{item.id}</td>
+                      <td>{item.queue_id}</td>
                       <td>{item.first_name} {item.last_name}</td>
                       <td>{item.id_card}</td>
+                      <td>{item.symptom}</td>
                       <td>{item.department_name}</td>
-                      <td>{item.congenital_disease}</td>
+                      <td>{item.queue_date}</td>
+                      <td>{item.queue_date}</td>
+
                       
                       
                       <td>
@@ -125,29 +130,26 @@ const removeEmp = (id) => {
                       <i className="fa-solid fa-pen-to-square"></i>
                     </button>
                     </td>
-                    <td>
-                     {/* ปุ่มลบข้อมูล */}
-                     <button
-                      type="button"
-                      className="btn btn-danger text-white mx-1 mt-1"
-                      onClick={() => {
-                        deleteData(item.id);
-                      }}
-                    >
-                      <i className="fa-solid fa-trash-can"></i>
-                    </button>
-                      </td>
 
+                    <td>
+                      <a
+                          className="btn btn-danger"
+                          style={{ float: "center" }}
+                          onClick={() => {
+                            removeEmp(item.queue_id);
+                          }}>
+                          <i className="fa-solid fa-trash-can"></i>
+                        </a>
+                    </td>
                       <td>
-                        <button
-                      type="button"
-                      className="btn btn-success text-white mx-1 mt-1"
-                      onClick={() => {
-                        navigate('/author/Main/callqueue', { state: item.id });
-                      }}
-                    >
-                      <i class="fa-solid fa-arrow-right"></i>
-                    </button>
+                      <a
+                          className="btn btn-success"
+                          style={{ float: "center" }}
+                          onClick={() => {
+                            removeEmp(item.queue_id);
+                          }}>
+                          <i class="fa-solid fa-arrow-right"></i>
+                        </a>
                     </td>
                     </tr>
                   );

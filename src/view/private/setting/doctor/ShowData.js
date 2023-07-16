@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect,} from 'react';
 import { TextSelect } from '../../../../components/TextSelect';
 import PageSize from '../../../../data/pageSize.json';
 import Pagination from 'react-js-pagination';
@@ -12,7 +12,7 @@ function ShowData({ data, pagin, updateStatus, deleteData, changePage, changePag
 
   useEffect(() => {
     axios
-      .get("https://json-six-lac.vercel.app/doctor")
+      .get("https://quaint-culottes-dove.cyclic.app/apis/doctors/")
       .then((res) => {
         //console.log(res);
         setDataQ(res.data);
@@ -24,6 +24,10 @@ function ShowData({ data, pagin, updateStatus, deleteData, changePage, changePag
     //   print();
     }
   }, [dataQ]);
+  const loadEdit =(id) =>{
+    navigate("/admin/doctor/form/"+id)
+  }
+  
 
   return (
     <div className="w-full">
@@ -46,7 +50,7 @@ function ShowData({ data, pagin, updateStatus, deleteData, changePage, changePag
             type="button"
             className="btn btn-success"
             onClick={() => {
-              navigate('/admin/doctor/form');
+              navigate('/admin/doctor/create/form/');
             }}
           >
             <i className="fa-solid fa-plus mx-1"></i>
@@ -62,7 +66,7 @@ function ShowData({ data, pagin, updateStatus, deleteData, changePage, changePag
                 ลำดับ
               </th>
               <th scope="col"  style={{ width: '10%' }}>
-                เลขบัตรประชาชน
+คำนำหน้า
               </th>
               <th scope="col" style={{ width: '10%' }}>
                 ชื่อ
@@ -96,9 +100,9 @@ function ShowData({ data, pagin, updateStatus, deleteData, changePage, changePag
               </tr>
             ) : (
               dataQ.map((item, index) => (
-                <tr key={item.id}>
+                <tr key={item.doctor_id}>
                   <td>{(pagin.currentPage - 1) * pagin.pageSize + (index + 1)}</td>
-                  <td>{item.id_card}</td>
+                  <td>{item.prefix_name}</td>
                   <td>{item.doctor_first_name}</td>
                   <td>{item.doctor_last_name}</td>
                   <td><img className="img-hpt" src={item.doctor_image}/></td>
@@ -111,7 +115,7 @@ function ShowData({ data, pagin, updateStatus, deleteData, changePage, changePag
                       type="button"
                       className="btn btn-warning text-white mx-1 mt-1"
                       onClick={() => {
-                        navigate('/admin/doctor/form', { state: item.id });
+                        loadEdit(item.doctor_id);
                       }}
                     >
                       <i className="fa-solid fa-pen-to-square"></i>

@@ -21,6 +21,7 @@ import MainAuthorities from "../view/private/setting/authorities/MainAuthorities
 import EditDepartment from "../view/private/setting/departmentType/EditDepartment"
 import FormAuthorities from "../view/private/setting/authorities/form/FormAuthorities";
 import EditAuthorities from "../view/private/setting/authorities/form/EditAuthorities"
+import HomePrivate from "../layout/private/HomePrivate";
 
 
 // public
@@ -38,6 +39,8 @@ import Calendars from "../view/public/Calendars";
 import ShowDepartment from '../view/public/Department/ShowDepartment'
 import ShowDepartmentAll from "../view/public/Department/ShowDepartmentAll";
 import Dental from "../view/public/Department/DetailDepartment/dental/Dental";
+import LoginModal from "../components/Login/LoginModal";
+import Profile from "../view/public/Profile/Profile"
 
 
 import MainInformation from "../view/public/information/MainInformation";
@@ -46,8 +49,8 @@ import MainInformation from "../view/public/information/MainInformation";
 import MainBookAuthor from "../view/authorities/book/MainBookAuthor";
 import MainHistoryAuthor from "../view/authorities/history/MainHistoryAuthor";
 import ManageBook from '../view/authorities/Main/ManageBook'
-import View_Questionnaire from "../view/authorities/view_questionnaire/View_Questionnaire";
-import CallQueue from "../view/authorities/Main/CallQueue/CallQueue";
+import ViewQuestion from "../view/authorities/view_questionnaire/ViewQuestion";
+
 import EditProfileAuthor from "../view/authorities/Profile/EditProfileAuthor";
 import ForgetPasswordAuthor from "../view/authorities/Profile/ForgetPasswordAuthor";
 import EditPasswordAuthor from "../view/authorities/Profile/EditPasswordAuthor";
@@ -89,7 +92,9 @@ function Router(props) {
               <Route path="/showdepartmentAll" element={<ShowDepartmentAll/>} />
              
               <Route path="/detaildental" element={<Dental/>} />
-              <Route path="/detaildental/:DId" element={<Dental/>} /> 
+              <Route path="/detaildental/:Id" element={<Dental/>} /> 
+              <Route path="/login" element={<LoginModal/>} /> 
+              <Route path="/Profile" element={<Profile/>} /> 
 
               <Route path="*" element={<Redirect />} />
               
@@ -101,7 +106,7 @@ function Router(props) {
         ) : role === 1 ? (
           <PrivateLayout>
             <Routes>
-              <Route path="/admin" element={<h1>หลังบ้าน</h1>} />
+              <Route path="/" element={<HomePrivate/>} />
               <Route path="/admin/data-hospital" element={<MainHospital />}/>
               <Route path="/admin/hospital/form" element={<FormHospital />}/>
               <Route path="/admin/hospital/form/:FId" element={<FormHospital />}/>
@@ -109,7 +114,7 @@ function Router(props) {
               <Route path="/admin/open-schedule/form" element={<FormOpenSchedule />}/>
               <Route path="/admin/department-type"element={<MainDepartmentType />}/>
               <Route path="/admin/doctor" element={<MainDoctor />} />
-              <Route path="/admin/doctor/form" element={<FormDoctor />} />
+              <Route path="/admin/doctor/form/:doctorsId" element={<FormDoctor />} />
               <Route path="/admin/user" element={<MainUser />} />
               <Route path="/admin/user/form" element={<FormUser />} />
               <Route path="/admin/authorities" element={<MainAuthorities />} />
@@ -130,10 +135,10 @@ function Router(props) {
               <Route path="/author" element={<h1>เจ้าหน้าที่</h1>} />
               <Route path="/author/book-an-appointment"element={<MainBookAuthor/>}/>
               <Route path="/author/history"element={<MainHistoryAuthor />}/>
-              <Route path="/view/questionnaire" element={<View_Questionnaire />} />
+              <Route path="/view/Question" element={<ViewQuestion />} />
               <Route path="/author/Manage" element={<ManageBook />} />
               {/* <Route path="/author/Main/View" element={<ViewAssessment/>} /> */}
-              <Route path="/author/Main/callqueue" element={<CallQueue/>} />
+          
               <Route path="/author/profile" element={<EditProfileAuthor/>} />
               <Route path="/author/forget-password" element={<ForgetPasswordAuthor/>} />
               <Route path="/author/edit-password" element={<EditPasswordAuthor/>} />
