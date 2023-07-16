@@ -6,7 +6,11 @@ import { Formik, Form, ErrorMessage } from "formik";
 
 
 import Schema from "../../authentication/register/Validation";
+<<<<<<< HEAD
 
+=======
+/**หน้าแก้ไขรหัสผ่านของเจ้าหน้าที่ */
+>>>>>>> beckhado
 import {
   createUser,
   updateUser,

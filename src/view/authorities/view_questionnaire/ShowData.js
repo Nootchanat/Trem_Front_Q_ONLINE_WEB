@@ -9,26 +9,68 @@ import DateTh from '../../../components/DateTh';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
+<<<<<<< HEAD
 function ShowData({ data, pagin, changePage, changePageSize}) {
   const [dataQ, setDataQ] = useState(null);
   const [viewQ, setViewQ] = useState(null); // เรียกใช้ข้อมูลจาก หน้า db มาโชว์
   
+=======
+function ShowData({ data, pagin, changePage, changePageSize }) {
+  const [dataQ, setDataQ] = useState(null);
+  const [viewQ, setViewQ] = useState(null); // เรียกใช้ข้อมูลจาก หน้า db มาโชว์
+  const [counts, setCounts] = useState({});
+
+  //ตัวกำหนดเส้นทาง
+>>>>>>> beckhado
   const navigate = useNavigate();
   const pageStyle = `
   @page {
     size: 4in 4in
   }`;
 
+<<<<<<< HEAD
   useEffect(() => {
     axios
+=======
+  const message ="ระบบใช้งานได้สะดวกดี , ระบบใช้งานได้สะดวกดีมากๆ , ระบบใช้งานได้สะดวกพอใช้ , ระบบควรปรับปรุง , ระบบควรปรับปรุงอย่างยิ่ง";
+
+  const textCount = {
+    "ระบบใช้งานได้สะดวกดี":0,
+    "ระบบใช้งานได้สะดวกดีมากๆ":0,
+    "ระบบใช้งานได้สะดวกพอใช้":0,
+    "ระบบควรปรับปรุง":0,
+    "ระบบควรปรับปรุงอย่างยิ่ง":0
+  };
+
+  const texts = message.split(",");
+    
+       texts.forEach((test) => {
+        textCount[test] += 1;
+       });
+
+       console.log(`ระบบใช้งานได้สะดวกดี:${textCount["ระบบใช้งานได้สะดวกดี"]}`);
+       console.log(`ระบบใช้งานได้สะดวกดีมากๆ:${textCount["ระบบใช้งานได้สะดวกดีมากๆ"]}`);
+       console.log(`ระบบใช้งานได้สะดวกพอใช้:${textCount["ระบบใช้งานได้สะดวกพอใช้"]}`);
+       console.log(`ระบบควรปรับปรุง:${textCount["ระบบควรปรับปรุง"]}`);
+       console.log(`ระบบควรปรับปรุงอย่างยิ่ง:${textCount["ระบบควรปรับปรุงอย่างยิ่ง"]}`);
+
+  useEffect(() => {
+    axios
+      // เรียกใช้ API เพื่อดึงข้อมูลจากฐานข้อมูล
+>>>>>>> beckhado
       .get("https://json-six-lac.vercel.app/questionaire")
       .then((res) => {
         console.log(res);
         setViewQ(res.data);
+<<<<<<< HEAD
+=======
+        getCounts(res.data);
+>>>>>>> beckhado
       })
       .catch((err) => {
         console.log(err);
       });
+<<<<<<< HEAD
   }, []);
 
 //   const print = useReactToPrint({
@@ -56,11 +98,89 @@ function ShowData({ data, pagin, changePage, changePageSize}) {
         </div>
         
       </div>
+=======
+
+  }, []);
+
+  const getCounts = data => {
+    // นับจำนวนรายการในแต่ละคอลัมน์
+    const columnCounts = {};
+
+    data.forEach(item => {
+      Object.keys(item).forEach(key => {
+        if (columnCounts[key]) {
+          columnCounts[key] += 1;
+        } else {
+          columnCounts[key] = 1;
+        }
+      });
+    });
+
+    setCounts(columnCounts);
+  };
+
+  
+  
+
+
+  //ส่วนของโครงสร้างแดชบอด
+
+
+  //   const print = useReactToPrint({
+  //     content: () => componentRef.current,
+  //     documentTitle: "Q_Online",
+  //     pageStyle: pageStyle,
+  //   });
+
+
+  return (
+    <div className="text-center">
+      <div className="card text-white bg-success mb-3">
+        <div className='card-body'>
+          {/* <h2>Dashboard</h2> */}
+          <div style={{ textAlign: 'center' }}>
+            {/* <div className='card'> */}
+              <h3>การประเมินรวม </h3>
+              
+              {/* {Object.keys(counts).map(key => (
+                <p key={key} >
+                   
+                  {key}: {counts[key]}
+                 
+                
+                  
+                </p>
+              ))} */}
+            {/* </div> */}
+
+          </div>
+
+          {/* <button onClick={fetchData}>Refresh</button> */}
+        </div>
+        {/* <div className="w-pagesize">
+          <TextSelect
+              id="ลำดับของผู้ใช้"
+              name="ประเมิน"
+              options={PageSize}
+              value={PageSize.filter((a) => a.id === pagin.pageSize)}
+              // onChange={(item) => {
+              //   changePageSize(item.id);
+              // }}
+              getOptionLabel={(z) => z.label}
+              getOptionValue={(x) => x.id}
+            />
+
+        </div> */}
+
+      </div>
+
+>>>>>>> beckhado
       <div className="overflow-auto">
         <table className="table">
           <thead>
             <tr className="table-success">
               <th scope="col" style={{ width: '10%' }}>
+<<<<<<< HEAD
               ลำดับ
               </th>
               <th scope="col" style={{ width: '10%' }}>
@@ -89,6 +209,36 @@ function ShowData({ data, pagin, changePage, changePageSize}) {
                   );
                 })}
             </tbody>
+=======
+                ลำดับ
+              </th>
+              {/* <th scope="col" style={{ width: '10%' }}>
+                จำนวนดาวการประเมิน
+              </th> */}
+              <th scope="col" style={{ width: '15%' }}>
+                ประเมิน
+              </th>
+              <th scope="col" style={{ width: '20%' }}>
+                รายละเอียดเพิ่มเติม
+              </th>
+
+
+            </tr>
+          </thead>
+          <tbody>
+            {viewQ &&
+              viewQ.map((item) => {
+                return (
+                  <tr key={item.id}>
+                    <td>{item.id}</td>
+                    {/* <td><img className="img-hpt" src={item.assets} /></td> */}
+                    <td>{item.questionaire_name}</td>
+                    <td>{item.suggestion}</td>
+                  </tr>
+                );
+              })}
+          </tbody>
+>>>>>>> beckhado
           <tbody>
             {data.length === 0 ? (
               <tr>
@@ -110,9 +260,15 @@ function ShowData({ data, pagin, changePage, changePageSize}) {
                     <DateTh date={item.open_date} />
                   </td>
                   <td>{item.number}</td>
+<<<<<<< HEAD
                   
                   <td>
                   
+=======
+
+                  <td>
+
+>>>>>>> beckhado
                     <button type="button" className='btn btn-info' onClick={() => {
                       //print();
                       setDataQ(item);
@@ -142,7 +298,11 @@ function ShowData({ data, pagin, changePage, changePageSize}) {
           />
         </div>
       </div>
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> beckhado
     </div>
   );
 }

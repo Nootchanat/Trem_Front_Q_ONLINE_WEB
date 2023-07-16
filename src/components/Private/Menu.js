@@ -1,20 +1,38 @@
 export const Menu = [
   {
     id: 1,
+<<<<<<< HEAD
+=======
+    title: 'หน้าหลัก',
+    icon: 'fa-solid fa-house',
+    pathname: '/',
+    type: 1,
+  },
+  {
+    id: 2,
+>>>>>>> beckhado
     title: 'ข้อมูลทั่วไปโรงพยาบาล',
     icon: 'fa-solid fa-q',
     pathname: '/admin/data-hospital',
     type: 1,
   },
   {
+<<<<<<< HEAD
     id: 2,
+=======
+    id: 3,
+>>>>>>> beckhado
     title: 'ข้อมูลแผนกและการตรวจรักษา',
     icon: 'fa-solid fa-calendar-days',
     pathname: '/admin/department-type',
     type: 1,
   },
   {
+<<<<<<< HEAD
     id: 3,
+=======
+    id: 4,
+>>>>>>> beckhado
     title: 'จัดการ',
     icon: 'fa-solid fa-gears',
     pathname: '#',

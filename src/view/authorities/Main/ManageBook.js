@@ -278,4 +278,8 @@ function ManageBook  ()  {
   );
 };
 
+<<<<<<< HEAD
 export default ManageBook;
+=======
+export default ManageBook;
+>>>>>>> beckhado

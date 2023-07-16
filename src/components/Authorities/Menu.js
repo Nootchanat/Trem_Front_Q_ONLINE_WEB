@@ -10,6 +10,7 @@ export const Menu = [
     id: 2,
     title: 'ตารางเปิดจองคิว',
     icon: 'fa-solid fa-calendar-days',
+<<<<<<< HEAD
     pathname: '/',
     type: 1,
   },
@@ -46,6 +47,30 @@ export const Menu = [
     id: 5,
     title: 'การประเมินการจองคิว',
     icon: 'fa-solid fa-calendar-days',
+=======
+    pathname: '/author/open-queue',
+    type: 1,
+  },
+  
+   {
+     id: 3,
+     title: 'จัดการจองคิว',
+    icon: 'fa-solid fa-gear',
+    pathname: '/author/Manage',
+    type: 1,   
+   },
+   {
+    id: 4,title: 'ดูข้อมูลการจองคิว',
+    icon: 'fa-solid  fa-users',
+    pathname: '/author/history',
+    type: 1,  
+  },
+   
+   {
+    id: 5,
+    title: 'การประเมินการจองคิว',
+    icon: 'fa-solid fa-address-book',
+>>>>>>> beckhado
     pathname: '/view/questionnaire',
     type: 1,
   },

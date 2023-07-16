@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useRef, useState, useEffect } from 'react';
+=======
+import React, { useRef, useState, } from 'react';
+>>>>>>> beckhado
 import { TextSelect } from '../../../components/TextSelect';
 import PageSize from '../../../data/pageSize.json';
 import Pagination from 'react-js-pagination';
@@ -10,6 +14,7 @@ import MainPdf from './pdf/MainPdf';
 function ShowDataCheckQueue({ data, pagin, changePage, changePageSize }) {
   const [dataQ, setDataQ] = useState(null);
   const componentRef = useRef();
+<<<<<<< HEAD
   const pageStyle = `
   @page {
     size: 4in 4in
@@ -20,6 +25,18 @@ function ShowDataCheckQueue({ data, pagin, changePage, changePageSize }) {
     //   print();
     }
   }, [dataQ]);
+=======
+  // // const pageStyle = `
+  // // @page {
+  // //   size: 4in 4in
+  // // }`;
+
+  // useEffect(() => {
+  //   if (dataQ) {
+  //   //   print();
+  //   }
+  // }, [dataQ]);
+>>>>>>> beckhado
 
 //   const print = useReactToPrint({
 //     content: () => componentRef.current,
@@ -54,9 +71,21 @@ function ShowDataCheckQueue({ data, pagin, changePage, changePageSize }) {
               <th scope="col" style={{ width: '10%' }}>
                 รหัสคิว
               </th>
+<<<<<<< HEAD
               <th scope="col" style={{ width: '5%' }}>
                 ห้อง
               </th>
+=======
+              <th scope="col" style={{ width: '10%' }}>
+                ประเภทการรักษา
+              </th>
+              <th scope="col" style={{ width: '5%' }}>
+                ห้อง
+              </th>
+              <th scope="col" style={{ width: '5%' }}>
+              คิวที่
+              </th>
+>>>>>>> beckhado
               <th scope="col" style={{ width: '10%' }}>
                 สถานะ
               </th>

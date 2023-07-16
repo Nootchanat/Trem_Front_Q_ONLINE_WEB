@@ -20,6 +20,11 @@ import FormHospital from "../view/private/openSchedule/form/DataHospital/FormHos
 import MainAuthorities from "../view/private/setting/authorities/MainAuthorities";
 import EditDepartment from "../view/private/setting/departmentType/EditDepartment"
 import FormAuthorities from "../view/private/setting/authorities/form/FormAuthorities";
+<<<<<<< HEAD
+=======
+import EditAuthorities from "../view/private/setting/authorities/form/EditAuthorities"
+import HomePrivate from "../layout/private/HomePrivate";
+>>>>>>> beckhado
 
 
 // public
@@ -34,6 +39,7 @@ import CheckQueue from "../view/public/queue/CheckQueue";
 import Questionaire from "../view/public/questionnaire/Questionnaire";
 import ForgetPassword from '../view/public/editProfile/ForgetPassword';
 import Calendars from "../view/public/Calendars";
+<<<<<<< HEAD
 import Maininformation from "../view/public/information/Maininformation";
 import ShowDepartment from '../view/public/Department/ShowDepartment'
 import ShowDepartmentAll from "../view/public/Department/ShowDepartmentAll";
@@ -41,15 +47,37 @@ import Dental from "../view/public/Department/DetailDepartment/dental/Dental";
 import CommonDisease from "../view/public/Department/DetailDepartment/CommonDisease";
 import Heart from "../view/public/Department/DetailDepartment/Heart";
 import Pediatrics from "../view/public/Department/DetailDepartment/Pediatrics";
+=======
+import ShowDepartment from '../view/public/Department/ShowDepartment'
+import ShowDepartmentAll from "../view/public/Department/ShowDepartmentAll";
+import Dental from "../view/public/Department/DetailDepartment/dental/Dental";
+import LoginModal from "../components/Login/LoginModal";
+import Profile from "../view/public/Profile/Profile"
+
+
+import MainInformation from "../view/public/information/MainInformation";
+
+>>>>>>> beckhado
 //Authorities
 import MainBookAuthor from "../view/authorities/book/MainBookAuthor";
 import MainHistoryAuthor from "../view/authorities/history/MainHistoryAuthor";
 import ManageBook from '../view/authorities/Main/ManageBook'
+<<<<<<< HEAD
 import View_Questionnaire from "../view/authorities/view_questionnaire/View_Questionnaire";
 import CallQueue from "../view/authorities/Main/CallQueue/CallQueue";
 import EditProfileAuthor from "../view/authorities/Profile/EditProfileAuthor";
 import ForgetPasswordAuthor from "../view/authorities/Profile/ForgetPasswordAuthor";
 import EditPasswordAuthor from "../view/authorities/Profile/EditPasswordAuthor";
+=======
+import ViewQuestion from "../view/authorities/view_questionnaire/ViewQuestion";
+
+import EditProfileAuthor from "../view/authorities/Profile/EditProfileAuthor";
+import ForgetPasswordAuthor from "../view/authorities/Profile/ForgetPasswordAuthor";
+import EditPasswordAuthor from "../view/authorities/Profile/EditPasswordAuthor";
+import OpenQueue from "../view/authorities/open-queue/OpenSchedule";
+
+
+>>>>>>> beckhado
 
 
 
@@ -71,8 +99,13 @@ function Router(props) {
                 element={<MainHistory />}
               />
               <Route path="/register" element={<FormRegister />} />
+<<<<<<< HEAD
               <Route path="/information" element={<Maininformation/>}/>
               <Route path="/information/:Id" element={<Maininformation/>}/>
+=======
+              <Route path="/information" element={<MainInformation/>}/>
+              <Route path="/information/:Id" element={<MainInformation/>}/>
+>>>>>>> beckhado
               <Route path="/calendar" element={<Calendars/>} />
               <Route path="/edit-profile" element={<EditProfile />} />
               <Route path="/edit-password" element={<EditPassword />} />
@@ -83,11 +116,22 @@ function Router(props) {
               <Route path="/view-history" element={<MainHistory />} /> 
                 <Route path="/showdepartment" element={<ShowDepartment/>} />
               <Route path="/showdepartmentAll" element={<ShowDepartmentAll/>} />
+<<<<<<< HEAD
               <Route path="/commondisease" element={<CommonDisease/>} />
               <Route path="/detaildental" element={<Dental/>} />
               <Route path="/detaildental/:DId" element={<Dental/>} /> 
 
               <Route path="*" element={<Redirect />} />
+=======
+             
+              <Route path="/detaildental" element={<Dental/>} />
+              <Route path="/detaildental/:Id" element={<Dental/>} /> 
+              <Route path="/login" element={<LoginModal/>} /> 
+              <Route path="/Profile" element={<Profile/>} /> 
+
+              <Route path="*" element={<Redirect />} />
+              
+>>>>>>> beckhado
             </Routes>
           </PublicLayout>
 
@@ -96,7 +140,11 @@ function Router(props) {
         ) : role === 1 ? (
           <PrivateLayout>
             <Routes>
+<<<<<<< HEAD
               <Route path="/admin" element={<h1>หลังบ้าน</h1>} />
+=======
+              <Route path="/" element={<HomePrivate/>} />
+>>>>>>> beckhado
               <Route path="/admin/data-hospital" element={<MainHospital />}/>
               <Route path="/admin/hospital/form" element={<FormHospital />}/>
               <Route path="/admin/hospital/form/:FId" element={<FormHospital />}/>
@@ -104,10 +152,19 @@ function Router(props) {
               <Route path="/admin/open-schedule/form" element={<FormOpenSchedule />}/>
               <Route path="/admin/department-type"element={<MainDepartmentType />}/>
               <Route path="/admin/doctor" element={<MainDoctor />} />
+<<<<<<< HEAD
               <Route path="/admin/doctor/form" element={<FormDoctor />} />
               <Route path="/admin/user" element={<MainUser />} />
               <Route path="/admin/user/form" element={<FormUser />} />
               <Route path="/admin/authorities" element={<MainAuthorities />} />
+=======
+              <Route path="/admin/doctor/form/:doctorsId" element={<FormDoctor />} />
+              <Route path="/admin/user" element={<MainUser />} />
+              <Route path="/admin/user/form" element={<FormUser />} />
+              <Route path="/admin/authorities" element={<MainAuthorities />} />
+              <Route path="/admin/authorities/form" element={<FormAuthorities />} />
+              <Route path="/admin/edit-authorities" element={<EditAuthorities />} />
+>>>>>>> beckhado
               <Route path="/admin/edit-department" element={<EditDepartment />} />
               <Route path="/admin/form-authorities" element={<FormAuthorities/>} />
               <Route path="*" element={<Redirect />} />
@@ -119,6 +176,7 @@ function Router(props) {
         ) : (
           <AuthoritiesLayout>
             <Routes>
+<<<<<<< HEAD
               <Route path="/author" element={<h1>เจ้าหน้าที่</h1>} />
               <Route path="/author/book-an-appointment"element={<MainBookAuthor/>}/>
               <Route path="/author/history"element={<MainHistoryAuthor />}/>
@@ -129,6 +187,20 @@ function Router(props) {
               <Route path="/author/profile" element={<EditProfileAuthor/>} />
               <Route path="/author/forget-password" element={<ForgetPasswordAuthor/>} />
               <Route path="/author/edit-password" element={<EditPasswordAuthor/>} />
+=======
+              
+              <Route path="/author" element={<h1>เจ้าหน้าที่</h1>} />
+              <Route path="/author/book-an-appointment"element={<MainBookAuthor/>}/>
+              <Route path="/author/history"element={<MainHistoryAuthor />}/>
+              <Route path="/view/Question" element={<ViewQuestion />} />
+              <Route path="/author/Manage" element={<ManageBook />} />
+              {/* <Route path="/author/Main/View" element={<ViewAssessment/>} /> */}
+          
+              <Route path="/author/profile" element={<EditProfileAuthor/>} />
+              <Route path="/author/forget-password" element={<ForgetPasswordAuthor/>} />
+              <Route path="/author/edit-password" element={<EditPasswordAuthor/>} />
+              <Route path="/author/open-queue" element={<OpenQueue/>} />
+>>>>>>> beckhado
             </Routes>
           </AuthoritiesLayout>
 

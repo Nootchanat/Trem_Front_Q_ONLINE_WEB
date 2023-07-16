@@ -2,12 +2,22 @@
 
 
 .main-public-layout {
+<<<<<<< HEAD
   min-height: 170vh;
+=======
+  min-height: 120vh;
+  position: relative;
+  top: 130px;
+>>>>>>> beckhado
   background-color: #E3F2FD;
 }
 
 #public .navbar {
+<<<<<<< HEAD
   color: #ffff !important;
+=======
+  color: #ffffff !important;
+>>>>>>> beckhado
   background-color: #133C55;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   font-weight: bold;
@@ -18,6 +28,10 @@
   font-size: 35px;
   color: #ffff;
   text-decoration: none;
+<<<<<<< HEAD
+=======
+  font-weight: bold;
+>>>>>>> beckhado
 }
 
 
@@ -33,6 +47,7 @@
 
 #public .footer {
   display: flex;
+<<<<<<< HEAD
   justify-content: center;
   align-items: center;
   color: #ffff !important;
@@ -40,6 +55,21 @@
   background-color: #133C55;
 }
 
+=======
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  color: #ffff !important;
+  height: 340px;
+  background-color: #133C55;
+  text-align: center;
+}
+
+
+
+
+
+>>>>>>> beckhado
 /*LOGO*/
 .logoImg{
   height: 100px;
@@ -73,12 +103,15 @@
   
 } */
 
+<<<<<<< HEAD
 .card-body{
   margin-bottom: 25px;
   margin-top: 25px;
   margin-left: 50px;
  
 }
+=======
+>>>>>>> beckhado
 
 /* .card.d-flex.justify-content-center{
   display: block;
@@ -90,10 +123,17 @@
   font-family: sans-serif;
   text-align: center;
 }
+<<<<<<< HEAD
 .container{
 
   position: absolute;
   top: 600px;
+=======
+.containerProfile{
+
+  position: absolute;
+  top: 370px;
+>>>>>>> beckhado
   left: 50%;
   transform: translate(-50%, -50%);
   background:#ffffff ;
@@ -186,3 +226,16 @@ textarea {
 .card-align-items-center{
   background:#A9D6E5 ;
 }
+<<<<<<< HEAD
+=======
+
+.silder-home{
+  width: 70%;
+  margin-top: -30px;
+  margin-left: 150px;
+}
+
+.title-message{
+  margin-top: 25px;
+}
+>>>>>>> beckhado

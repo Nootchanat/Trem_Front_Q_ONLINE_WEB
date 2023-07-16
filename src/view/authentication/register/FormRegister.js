@@ -2,6 +2,10 @@ import React, { Fragment, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { createPatient } from "../../../service/Patient.Service";
+<<<<<<< HEAD
+=======
+import DateTh from "../../../components/DateTh";
+>>>>>>> beckhado
 
 import { Formik, Form, ErrorMessage } from "formik";
 import { TextSelect } from "../../../components/TextSelect";
@@ -50,7 +54,11 @@ function FormRegister() {
         Swal.fire({
           icon: "success",
           title: "ลงทะเบียนสำเร็จ",
+<<<<<<< HEAD
           showConfirmButton: false,
+=======
+          showConfirmButton: true,
+>>>>>>> beckhado
           timer: 1500,
         });
         navigate("/login");
@@ -58,7 +66,11 @@ function FormRegister() {
         Swal.fire({
           icon: "error",
           title: "ลงทะเบียนไม่สำเร็จ !!",
+<<<<<<< HEAD
           showConfirmButton: true,
+=======
+          showConfirmButton: false,
+>>>>>>> beckhado
         });
       }
     } else {
@@ -193,23 +205,40 @@ function FormRegister() {
                           <label>ยืนยันรหัสผ่าน</label>
                           <label className="red">*</label>
                           <input
+<<<<<<< HEAD
                             name="password"
                             type="text"
                             value={values.password}
                             className={`form-input ${
                               touched.password
                                 ? errors.password
+=======
+                            name="password1"
+                            type="text"
+                            value={values.password1}
+                            className={`form-input ${
+                              touched.password1
+                                ? errors.password1
+>>>>>>> beckhado
                                   ? "invalid"
                                   : "valid"
                                 : ""
                             }`}
                             onChange={(e) => {
+<<<<<<< HEAD
                               setFieldValue("password", e.target.value);
+=======
+                              setFieldValue("password1", e.target.value);
+>>>>>>> beckhado
                             }}
                           />
                           <ErrorMessage
                             component="div"
+<<<<<<< HEAD
                             name="password"
+=======
+                            name="password1"
+>>>>>>> beckhado
                             className="text-invalid"
                           />
                         </div>
@@ -754,7 +783,11 @@ function FormRegister() {
                           </div>
                         <div className="d-flex justify-content-center mt-3">
                         <button type="submit" className="btn btn-primary mx-1">
+<<<<<<< HEAD
                           จองคิว
+=======
+                         สมัครสมาชิก
+>>>>>>> beckhado
                         </button>
                         <button type="reset" className="btn btn-secondary mx-1">
                           ล้างค่า

@@ -10,7 +10,11 @@ import Schema from '../../authentication/register/Validation';
 import {  updateAuthorities, getDetailAuthorities, createAuthorities} from '../../../service/Authorities.Service';
 import { DropzoneImage } from '../../../components/DropzoneImage';
 import { baseURL } from '../../../helper/Axios';
+<<<<<<< HEAD
 
+=======
+/**หน้าแก้ไขโปรไฟล์ของเจ้าหน้าที่ */
+>>>>>>> beckhado
 
 function EditProfile() {
   const navigate = useNavigate();

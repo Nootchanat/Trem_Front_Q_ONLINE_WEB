@@ -9,11 +9,17 @@ import MainPdf from '../history/pdf/MainPdf';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> beckhado
 function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, deleteData }) {
   const [dataQ, setDataQ] = useState(null);
   const [empData, setEmpData] = useState(null);
   const componentRef = useRef();
   const navigate = useNavigate();
+<<<<<<< HEAD
   const pageStyle = `
   @page {
     size: 4in 4in
@@ -22,6 +28,12 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
   useEffect(() => {
     axios
       .get("https://json-six-lac.vercel.app/patient")
+=======
+  
+  useEffect(() => {
+    axios
+      .get("https://drab-tan-bluefish-tux.cyclic.app/apis/queue")
+>>>>>>> beckhado
       .then((res) => {
         //console.log(res);
         setEmpData(res.data);
@@ -41,6 +53,7 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
 //   });
 
 
+<<<<<<< HEAD
 const removeEmp = (id) => {
     if (window.confirm("คุณต้องการลบการจองคิวนี้ไหม ")) {
       axios
@@ -54,6 +67,17 @@ const removeEmp = (id) => {
         });
     }
   };
+=======
+const removeEmp =(queue_id)=>{
+  if(window.confirm("Do You Want To Delete This doctor?")){
+    axios.delete("https://drab-tan-bluefish-tux.cyclic.app/apis/queue/"+ queue_id)
+    .then((res)=>{
+      alert("Remove successfully.")
+      window.location.reload()
+    })
+  }
+}
+>>>>>>> beckhado
   return (
     <div className="w-full">
       <div className="d-flex justify-content-between mb-2">
@@ -78,22 +102,30 @@ const removeEmp = (id) => {
               <th scope="col" style={{ width: '5%' }}>
               คิวที่
               </th>
+<<<<<<< HEAD
               <th scope="col" style={{ width: '15%' }}>
+=======
+              <th scope="col" style={{ width: '20%' }}>
+>>>>>>> beckhado
               ชื่อผู้ป่วย
               </th>
               <th scope="col" style={{ width: '15%' }}>
               เลขบัตรประชาชน
               </th>
               <th scope="col" style={{ width: '15%' }}>
+<<<<<<< HEAD
               น้ำหนัก-ส่วนสูง
               </th>
               <th scope="col" style={{ width: '20%' }}>
+=======
+>>>>>>> beckhado
               อาการเบื้องต้น
               </th>
               <th scope="col" style={{ width: '10%' }}>
               แผนก
               </th>
               <th scope="col" style={{ width: '10%' }}>
+<<<<<<< HEAD
               โรคประจำตัว
               </th>
               <th scope="col" style={{ width: '10%' }}>
@@ -105,6 +137,24 @@ const removeEmp = (id) => {
               <th scope="col" style={{ width: '10%' }}>
               ลบ
               </th>
+=======
+              วันที่จอง<br>
+              </br>
+              ป/ด/ว
+              </th>
+              <th scope="col" style={{ width: '10%' }}>
+              เวลาที่จอง
+              </th>
+              <th scope="col" style={{ width: '5%' }}>
+              แก้ไข
+              </th>
+              <th scope="col" style={{ width: '5%' }}>
+              ลบ
+              </th>
+              <th scope="col" style={{ width: '15%' }}>
+              เรียกคิว
+              </th>
+>>>>>>> beckhado
               
             </tr>
           </thead>
@@ -113,6 +163,7 @@ const removeEmp = (id) => {
                 empData.map((item) => {
                   return (
                     <tr key={item.id}>
+<<<<<<< HEAD
                       <td>{item.id}</td>
                       <td>{item.first_name} {item.last_name}</td>
                       <td>{item.id_card}</td>
@@ -121,6 +172,17 @@ const removeEmp = (id) => {
                       <td>{item.department_name}</td>
                       <td>{item.congenital_disease}</td>
                       <td>{item.queue_status_id}</td>
+=======
+                      <td>{item.queue_id}</td>
+                      <td>{item.first_name} {item.last_name}</td>
+                      <td>{item.id_card}</td>
+                      <td>{item.symptom}</td>
+                      <td>{item.department_name}</td>
+                      <td>{item.queue_date}</td>
+                      <td>{item.queue_date}</td>
+
+                      
+>>>>>>> beckhado
                       
                       <td>
                         <button
@@ -133,6 +195,7 @@ const removeEmp = (id) => {
                       <i className="fa-solid fa-pen-to-square"></i>
                     </button>
                     </td>
+<<<<<<< HEAD
                     <td>
                      {/* ปุ่มลบข้อมูล */}
                      <button
@@ -145,6 +208,29 @@ const removeEmp = (id) => {
                       <i className="fa-solid fa-trash-can"></i>
                     </button>
                       </td>
+=======
+
+                    <td>
+                      <a
+                          className="btn btn-danger"
+                          style={{ float: "center" }}
+                          onClick={() => {
+                            removeEmp(item.queue_id);
+                          }}>
+                          <i className="fa-solid fa-trash-can"></i>
+                        </a>
+                    </td>
+                      <td>
+                      <a
+                          className="btn btn-success"
+                          style={{ float: "center" }}
+                          onClick={() => {
+                            removeEmp(item.queue_id);
+                          }}>
+                          <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </td>
+>>>>>>> beckhado
                     </tr>
                   );
                 })}

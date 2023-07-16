@@ -5,6 +5,10 @@ import Pagination from "react-js-pagination";
 import DateTh from "../../../components/DateTh";
 import StatusBook from "../../../data/statusBook.json";
 // import { useReactToPrint } from 'react-to-print';
+<<<<<<< HEAD
+=======
+import { Link } from "react-router-dom";
+>>>>>>> beckhado
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +25,11 @@ function ShowDepartment({
   const [empData, setEmpData] = useState(null);
   const componentRef = useRef();
   const navigate = useNavigate();
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> beckhado
   const pageStyle = `
   @page {
     size: 4in 4in 
@@ -30,7 +38,11 @@ function ShowDepartment({
 
   useEffect(() => {
     axios
+<<<<<<< HEAD
       .get("https://json-six-lac.vercel.app/department")
+=======
+      .get("https://amused-ant-umbrella.cyclic.app/apis/departments")
+>>>>>>> beckhado
       .then((res) => {
         //console.log(res);
         setEmpData(res.data);
@@ -45,6 +57,7 @@ function ShowDepartment({
 
   const loadDetail = (id) => {
     navigate("/detaildental/" + id);
+<<<<<<< HEAD
   }
 
   //   const print = useReactToPrint({
@@ -178,6 +191,24 @@ function ShowDepartment({
               changePage(page);
             }}
           />
+=======
+  };
+
+  return (
+    <div className="w-full">
+      <div className="d-flex justify-content-between mb-2">
+        <div className="col-md-6 col-lg-6">
+          {empData &&
+            empData.map((item) => {
+              return (
+                <tr key={item.id}>
+                   <Link to={`/detaildental/${item.id}`}>{item.department_name}</Link>
+
+                  
+                </tr>
+              );
+            })}
+>>>>>>> beckhado
         </div>
       </div>
     </div>

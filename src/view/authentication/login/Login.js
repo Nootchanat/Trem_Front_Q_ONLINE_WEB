@@ -12,7 +12,11 @@ import axios from 'axios';
 
 function Login({ show, setShow, ...props }) {
   const navigate = useNavigate();
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> beckhado
   async function authentication(data) {
     let res = await authen(data);
     if (res) {

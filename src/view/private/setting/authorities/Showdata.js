@@ -46,7 +46,11 @@ function Showdata({ data, pagin, updateStatus, deleteData, changePage, changePag
             type="button"
             className="btn btn-success"
             onClick={() => {
+<<<<<<< HEAD
               navigate('/admin/doctor/form');
+=======
+              navigate('/admin/form-authorities');
+>>>>>>> beckhado
             }}
           >
             <i className="fa-solid fa-plus mx-1"></i>
@@ -100,7 +104,11 @@ function Showdata({ data, pagin, updateStatus, deleteData, changePage, changePag
                       type="button"
                       className="btn btn-warning text-white mx-1 mt-1"
                       onClick={() => {
+<<<<<<< HEAD
                         navigate('/admin/form-authorities', { state: item.id });
+=======
+                        navigate('/admin/edit-authorities', { state: item.id });
+>>>>>>> beckhado
                       }}
                     >
                       <i className="fa-solid fa-pen-to-square"></i>

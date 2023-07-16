@@ -14,7 +14,11 @@ import {
 } from "../../../service/User.Service";
 import { createPatient } from "../../../service/Patient.Service";
 
+<<<<<<< HEAD
 
+=======
+/**หน้าลืมรหัสผ่านของเจ้าหน้าที่ */
+>>>>>>> beckhado
 function ForgetPassword() {
   const navigate = useNavigate();
   const location = useLocation();

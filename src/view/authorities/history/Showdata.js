@@ -3,12 +3,25 @@ import { TextSelect } from '../../../components/TextSelect';
 import PageSize from '../../../data/pageSize.json';
 import Pagination from 'react-js-pagination';
 import DateTh from '../../../components/DateTh';
+<<<<<<< HEAD
 import StatusBook from '../../../data/statusBook.json';
 // import { useReactToPrint } from 'react-to-print';
 import MainPdf from './pdf/MainPdf';
 
 function ShowData({ data, pagin, changePage, changePageSize }) {
   const [dataQ, setDataQ] = useState(null);
+=======
+import StatusBook from '../../../components/StatusBook';
+// import { useReactToPrint } from 'react-to-print';
+import MainPdf from './pdf/MainPdf';
+import axios from "axios";
+
+
+
+/**ดึงข้อมูลเป็นตารางเรียกใช้ในหน้า MainHistoryAuthor */
+function ShowData({ data, pagin,setDataBook, changePage, changePageSize }) {
+  const [statusBook, setStatusBook] = useState(null);
+>>>>>>> beckhado
   const componentRef = useRef();
   const pageStyle = `
   @page {
@@ -16,10 +29,27 @@ function ShowData({ data, pagin, changePage, changePageSize }) {
   }`;
 
   useEffect(() => {
+<<<<<<< HEAD
     if (dataQ) {
     //   print();
     }
   }, [dataQ]);
+=======
+    axios
+      .get("https://json-six-lac.vercel.app/department")
+      .then((res) => {
+        //console.log(res);
+        setStatusBook(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    if (statusBook) {
+      //   print();
+    }
+  }, [statusBook]);
+
+>>>>>>> beckhado
 
 //   const print = useReactToPrint({
 //     content: () => componentRef.current,
@@ -98,10 +128,18 @@ function ShowData({ data, pagin, changePage, changePageSize }) {
                     <DateTh date={item.open_date} />
                   </td>
                   <td>{item.number}</td>
+<<<<<<< HEAD
+=======
+                  
+                  
+                  
+                  
+>>>>>>> beckhado
                   <td>
                     <StatusBook status={item.status} />
                   </td>
                   <td>
+<<<<<<< HEAD
                     <button type="button" className='btn btn-info' onClick={() => {
                       //print();
                       setDataQ(item);
@@ -109,6 +147,15 @@ function ShowData({ data, pagin, changePage, changePageSize }) {
                     >
 
                       <i className="fa-solid fa-print text-white"></i>
+=======
+                    <button type="button" className='btn btn-warning text-white mx-1 mt-1' onClick={() => {
+                      
+                      setDataBook(item);
+                    }}
+                    >
+
+                      <i className="fa-solid fa-pen-to-square"></i>
+>>>>>>> beckhado
                     </button>
                   </td>
                 </tr>
@@ -131,13 +178,21 @@ function ShowData({ data, pagin, changePage, changePageSize }) {
           />
         </div>
       </div>
+<<<<<<< HEAD
       <div className='d-flex justify-content-center'>
+=======
+      {/* <div className='d-flex justify-content-center'>
+>>>>>>> beckhado
         <div className='hidden'>
           <div ref={componentRef}>
             <MainPdf dataQ={dataQ} />
           </div>
         </div>
+<<<<<<< HEAD
       </div>
+=======
+      </div> */}
+>>>>>>> beckhado
     </div>
   );
 }

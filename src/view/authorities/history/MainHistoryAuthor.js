@@ -5,7 +5,11 @@ import { TextSelect } from '../../../components/TextSelect';
 import { getBookAppointment } from '../../../service/BookAppoinment.Service';
 import ShowData from './Showdata';
 import StatusBook from '../../../data/statusBook.json';
+<<<<<<< HEAD
 
+=======
+/**หน้าดูข้อมูลการจองคิวทั้งหมดของเจ้าหน้าที่ */
+>>>>>>> beckhado
 function MainHistoryAuthor() {
   const [dataDepartment, setDataDepartment] = useState([]);
   const [data, setData] = useState([]);

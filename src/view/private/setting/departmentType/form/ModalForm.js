@@ -4,6 +4,10 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import Schema from './Validation';
 import { getDetailDepartmentType, createDepartmentType, updateDepartmentType } from '../../../../../service/DepartmentType.Service';
 import Swal from 'sweetalert2';
+<<<<<<< HEAD
+=======
+import { DropzoneImage } from '../../../../../components/DropzoneImage';
+>>>>>>> beckhado
 
 function ModalForm({ id, show, setShow, reload }) {
   const [detail, setDetail] = useState(null);
@@ -82,6 +86,24 @@ function ModalForm({ id, show, setShow, reload }) {
                   />
                   <ErrorMessage component="div" name="name" className="text-invalid" />
                 </div>
+<<<<<<< HEAD
+=======
+                <div className="col-12 col-sm-8 col-lg-7 col-xl-5 px-1 mt-2">
+                      <DropzoneImage
+                        title="อัพโหลดรูป"
+                        errors={errors.image}
+                        touched={touched.image}
+                        name="image"
+                        value={values.image}
+                        onChange={(e) => {
+                          e.preventDefault();
+                          let addimg = [];
+                          addimg.push(...e.target.files);
+                          setFieldValue('image', addimg);
+                        }}
+                      />
+                      </div>
+>>>>>>> beckhado
                 <div className="col-12">
                   <label>จำนวนคิวที่เปิดรับ</label>
                   <input
@@ -121,6 +143,36 @@ function ModalForm({ id, show, setShow, reload }) {
                   />
                   <ErrorMessage component="div" name="name" className="text-invalid" />
                 </div>
+<<<<<<< HEAD
+=======
+                <div className="col-6">
+                  <label>ชั้น</label>
+                  <input
+                    value={values.name}
+                    name="name"
+                    type="text"
+                    className={`form-input ${touched.name ? (errors.name ? 'invalid' : 'valid') : ''}`}
+                    onChange={(e) => {
+                      setFieldValue('name', e.target.value);
+                    }}
+                  />
+                  <ErrorMessage component="div" name="name" className="text-invalid" />
+                </div>
+                <div className="col-6">
+                  <label>อาคาร</label>
+                  <input
+                    value={values.name}
+                    name="name"
+                    type="text"
+                    className={`form-input ${touched.name ? (errors.name ? 'invalid' : 'valid') : ''}`}
+                    onChange={(e) => {
+                      setFieldValue('name', e.target.value);
+                    }}
+                  />
+                  <ErrorMessage component="div" name="name" className="text-invalid" />
+                </div>
+                
+>>>>>>> beckhado
               </div>
               <div className="d-flex justify-content-end mt-3">
                 <button type="submit" className="btn btn-success mx-1">

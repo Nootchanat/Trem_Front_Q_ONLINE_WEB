@@ -145,7 +145,11 @@ function FormUser() {
               style = {
                 {
                   width: "900px",
+<<<<<<< HEAD
                   height: "1100px",
+=======
+                  height: "950px",
+>>>>>>> beckhado
                   
                 }
               }>

@@ -4,7 +4,11 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import DateTh from '../../../components/DateTh';
 import Swal from 'sweetalert2';
 import {  createBookAppointment } from '../../../service/BookAppoinment.Service'
+<<<<<<< HEAD
 
+=======
+/**ยังไม้ได้เรียกใช้ รอเรียกใช้ตอนจองคิวสำเร็จ */
+>>>>>>> beckhado
 function ModalBook({ show, setShow, dataBook, setDataBook, reload }) {
 
     async function createBook(data) {

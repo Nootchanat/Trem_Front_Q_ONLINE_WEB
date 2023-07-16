@@ -6,7 +6,11 @@ import { baseURL } from '../../../helper/Axios'
 import PageSize from '../../../data/pageSize.json';
 import { TextSelect } from '../../../components/TextSelect'
 
+<<<<<<< HEAD
 
+=======
+/**ยังไม่ได้เรียกใช่หน้าไหนเลย */
+>>>>>>> beckhado
 
 function ShowData({ data, pagin, changePage, changePageSize })  {
     

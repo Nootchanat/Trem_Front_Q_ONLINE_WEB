@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 .card2{
     width: 800px;
     height: 950px;
@@ -10,19 +11,72 @@
 .btn2{
     justify-content: center;
     margin-left: 300px;
+=======
+.container11 {
+    top: 600px;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    background:#ffffff ;
+    padding: 20px;
+    border-radius: 10px;
+
+}
+
+.btn1{
+    
+    margin-left: 800px;
+    width: 100px;
+}
+
+.btn2{
+    
+    margin-left: 800px;
+>>>>>>> beckhado
     width: 100px;
 }
 
 
 
+<<<<<<< HEAD
 .img-h{
     margin-top: 15px;
     margin-left: 65px;
     justify-content: center;
     margin-bottom: 30px;
     width: 500px;
+=======
+.img-ht{
+    margin-top: 20px;
+    margin-left: 400px;
+    margin-right: 400px;
+    justify-content: center;
+    margin-bottom: 30px;
+    width: 300px;
+>>>>>>> beckhado
 }
 
 .container-info{
     display: contents;
+<<<<<<< HEAD
+=======
+}
+
+.form-group-h{
+    margin-left: 350px;
+}
+
+.title-content1{
+    margin-bottom: 25px;
+}
+
+.slider{
+    margin-top: 25px;
+    justify-content: center;
+    margin-left: 250px;
+    
+}
+
+.hospital-name{
+    text-align: center;
+>>>>>>> beckhado
 }

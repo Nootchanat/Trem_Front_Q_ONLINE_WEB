@@ -2,15 +2,24 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
+<<<<<<< HEAD
 
 import { Formik, Form, ErrorMessage } from 'formik';
+=======
+   
+import { Formik, Form, ErrorMessage } from 'formik';  // library ที่ช่วยทำ validation และerror message, handle error และ get value จากฟอร์ม
+>>>>>>> beckhado
 import { TextSelect } from '../../../components/TextSelect';
 import { getAddressThai } from '../../../service/Address.Service';
 
 
 
 
+<<<<<<< HEAD
 
+=======
+/**หน้าจองคิวของเจ้าหน้าที่จองให้ผู้ป่วย */
+>>>>>>> beckhado
 function MainBookAuthor ()  {
     // const [dataTreatment, setDataTreatment] = useState([]);
     const [data, setData] = useState([]);
