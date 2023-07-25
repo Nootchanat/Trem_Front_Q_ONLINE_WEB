@@ -1,7 +1,11 @@
 import React, { useRef, useState, useEffect, Fragment } from "react";
+
 import { Link, useNavigate, useParams } from "react-router-dom";
+
 import axios from "axios";
+
 import "../../../../../style/dental.css";
+
 import { NavItem, Row, Card } from "react-bootstrap";
 
 function Dental() {
@@ -18,70 +22,93 @@ function Dental() {
   const [close_time, setClose_Time] = useState([]);
   const [floor, setFloor] = useState([]);
   const [building, SetBuilding] = useState([]);
-  const [max_queue_number,SetMax_Queue_Number ] = useState([]);
+  const [max_queue_number, SetMax_Queue_Number] = useState([]);
   const { DId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res1 = await axios.get(
-          `https://quaint-culottes-dove.cyclic.app/apis/doctors`
-        );
-        const res2 = await axios.get(
-          `https://quaint-culottes-dove.cyclic.app/apis/departments/${DId}`
+          "https://shy-jade-clownfish.cyclic.app/apis/doctors/depart/" +
+          DId
         );
 
+        const departmentData = res1.data[0];  // Get the department details from the first element of the array
         console.log(res1);
-        console.log(res2);
-        setDoctors(res1.data)
-        setPrefix_Name(res1.data.prefix_name)
+
+        setDoctors(res1.data);
+        setPrefix_Name(res1.data.prefix_name);
         setDoctor_Frist_Name(res1.data.doctor_first_name);
         setDoctor_Last_Name(res1.data.doctor_last_name);
         setDoctor_Image(res1.data.doctor_image);
         setDoctor_Status(res1.data.doctor_status);
         setDoctor_Phonenumber(res1.data.doctor_phonenumber);
-    
-        setDepartment_Name(res2.data.department_name);
-        setOpen_Time(res2.data.open_time)
-        setClose_Time(res2.data.close_time);
-        SetMax_Queue_Number(res2.data.max_queue_number)
-        setFloor(res2.data.floor);
-        SetBuilding(res2.data.building);
+
+        setDepartment_Name(departmentData.department_name);
+        setOpen_Time(res1.data.open_time);
+        setClose_Time(res1.data.close_time);
+        SetMax_Queue_Number(res1.data.max_queue_number);
+        setFloor(res1.data.floor);
+        SetBuilding(res1.data.building);
       } catch (error) {
         console.log(error);
       }
-    };
+    }
+
+      ;
 
     fetchData();
   }, [DId]);
 
-  const filteredDoctors = doctors.filter(
-    (doctor) => doctor.department_id  === parseInt(DId)
-  );
-
   return (
     <div className="w-full">
       <div className=" departmentname">
-        <h1 className="title-content">แผนก{department_name}</h1>
+        <h1 className="title-content">แผนก {department_name}</h1>
       </div>
-      <div className="doctorindepartment">
-      {filteredDoctors.map((doctor) => (
-          doctor.doctor_status === "รับบริการ" ? (
-            <Card key={doctor.id} className="custom-card">
-              <Card.Body className="custom-card-body">
-              <Card.Img src={doctor.doctor_image} alt="Doctor" className="custom-card-img" />
-                <Card.Title className="custom-card-title">{doctor.prefix_name} {doctor.doctor_first_name} {doctor.doctor_last_name}</Card.Title>
-                <Card.Text className="custom-card-text">Phone: {doctor.doctor_phonenumber}</Card.Text>
-              </Card.Body>
-            </Card>
-          ) : null
-        ))}
+      <div className="w-full mb-4" style={{ textAlign: "center" }}>
+        <h4 className="centerdoctor">แพทย์ประจำแผนก</h4>
       </div>
-      <div className="departmentdetail">
+      <div className="container45">
+        <div className="row" >
+          {doctors.map((doctor) =>
+            doctor.doctor_status === "รับบริการ" ? (
+              <div className="card" key={doctor.id} style={{ width: "18rem", height: "580px" }}>
+                <div className="card_d">
+                  <Card.Img
+                    src={doctor.doctor_image}
+                    alt="Doctor"
+                    className="img-d"
+                    style={{
+                      width: "180px",
+                      height: "190px"
+                    }}
+                  />
+                </div>
+
+                <div className="sta-card">
+                  <Card.Title className="card-title">
+                    <h5>
+                      {doctor.prefix_name} {doctor.doctor_first_name}{" "}
+                      {doctor.doctor_last_name}
+                    </h5>
+                  </Card.Title>
+                </div>
+
+                <div className="sta-card-phone">
+                  <Card.Text className="card-text">
+                    เบอร์โทร: {doctor.doctor_phonenumber}
+                  </Card.Text>
+                </div>
+                
+              </div>
+
+            ) : null
+          )}
+        </div>
+
         
       </div>
     </div>
   );
 }
-
 export default Dental;

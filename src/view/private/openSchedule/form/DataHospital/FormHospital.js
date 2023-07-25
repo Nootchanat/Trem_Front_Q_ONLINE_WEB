@@ -12,41 +12,39 @@ import '../../../../../style/formHospital.css';
 
 function FormHospital() {
   const navigate = useNavigate();
-  const [id, setId] = useState("");
   const [searchAddress, setSearchAddress] = useState("");
   const [fullAddress, setFullAddress] = useState("");
   const [address, setAddress] = useState([]);
   const [detail, setDetail] = useState(null);
-  const [hospital_logo, setHospital_Logo] = useState("");
-  const [hospital_name, setHospital_Name] = useState("");
-  const [hospital_phone_number, setHospital_Phone_Number] = useState("");
-  const [hospital_No, setHospital_No] = useState("");
-  const [hospital_Moo, setHospital_Moo] = useState("");
-  const [hospital_latitude, setHospital_Latitude] = useState("");
-  const [hospital_logitude, setHospital_Logtitude] = useState("");
-  const [hospital_subdistrict, setHospital_Subdistrict] = useState("");
-  const [hospital_district, setHospital_District] = useState("");
-  const [hospital_province, setHospital_Province] = useState("");
-  const [hospital_zipcode, setHospital_Zipcode] = useState("");
-  const { FId } = useParams();
+  const [hospital_logo, sethospital_Logo] = useState("");
+  const [hospital_name, sethospital_Name] = useState("");
+  const [hospital_phone_number, sethospital_Phone_Number] = useState("");
+  const [hospital_No, sethospital_No] = useState("");
+  const [hospital_Moo, sethospital_Moo] = useState("");
+  const [hospital_latitude, sethospital_Latitude] = useState("");
+  const [hospital_logitude, sethospital_Logtitude] = useState("");
+  const [hospital_subdistrict, sethospital_Subdistrict] = useState("");
+  const [hospital_district, sethospital_District] = useState("");
+  const [hospital_province, sethospital_Province] = useState("");
+  const [hospital_zipcode, sethospital_Zipcode] = useState("");
+  const { HId } = useParams("");
 
   useEffect(() => {
     axios
-      .get("https://json-six-lac.vercel.app/hospital/" + FId)
+      .get("https://kind-red-centipede-cap.cyclic.app/apis/hospitals/" + 1)
       .then((res) => {
         console.log(res.data);
-        setId(res.data.id);
-        setHospital_Logo(res.data.hospital_logo);
-        setHospital_Name(res.data.hospital_name);
-        setHospital_Phone_Number(res.data.hospital_phone_number);
-        setHospital_No(res.data.hospital_No);
-        setHospital_Moo(res.data.hospital_Moo);
-        setHospital_Latitude(res.data.hospital_latitude);
-        setHospital_Logtitude(res.data.hospital_logitude);
-        setHospital_Subdistrict(res.data.hospital_subdistrict);
-        setHospital_District(res.data.hospital_district);
-        setHospital_Province(res.data.hospital_province);
-        setHospital_Zipcode(res.data.hospital_zipcode);
+        sethospital_Logo(res.data.hospital_logo);
+        sethospital_Name(res.data.hospital_name);
+        sethospital_Phone_Number(res.data.hospital_phone_number);
+        sethospital_No(res.data.hospital_No);
+        sethospital_Moo(res.data.hospital_Moo);
+        sethospital_Latitude(res.data.hospital_latitude);
+        sethospital_Logtitude(res.data.hospital_logitude);
+        sethospital_Subdistrict(res.data.hospital_subdistrict);
+        sethospital_District(res.data.hospital_district);
+        sethospital_Province(res.data.hospital_province);
+        sethospital_Zipcode(res.data.hospital_zipcode);
         setAddress(res.data.address);
         setFullAddress(res.data.fullAddress);
         setSearchAddress(res.data.searchAddress);
@@ -59,7 +57,7 @@ function FormHospital() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put("https://json-six-lac.vercel.app/hospital/" + FId, {
+      .put("https://puce-enchanting-salmon.cyclic.app/apis/hospitals/" + 1, {
         hospital_logo,
         hospital_name,
         hospital_phone_number,
@@ -178,7 +176,7 @@ function FormHospital() {
                             : ""
                         }`}
                         onChange={(e) => {
-                          setHospital_Name("hospital_name", e.target.value);
+                          sethospital_Name(e.target.value);
                         }}
                       />
                       <ErrorMessage
@@ -203,7 +201,7 @@ function FormHospital() {
                             : ""
                         }`}
                         onChange={(e) => {
-                          setHospital_No(" hospital_No", e.target.value);
+                          sethospital_No(e.target.value);
                         }}
                       />
                       <ErrorMessage
@@ -227,7 +225,7 @@ function FormHospital() {
                             : ""
                         }`}
                         onChange={(e) => {
-                          setHospital_Moo(" hospital_Moo", e.target.value);
+                          sethospital_Moo(e.target.value);
                         }}
                       />
                       <ErrorMessage
@@ -251,7 +249,7 @@ function FormHospital() {
                             : ""
                         }`}
                         onChange={(e) => {
-                          setHospital_Subdistrict(" hospital_subdistrict", e.target.value);
+                          sethospital_Subdistrict(e.target.value);
                         }}
                       />
                       <ErrorMessage
@@ -275,7 +273,7 @@ function FormHospital() {
                             : ""
                         }`}
                         onChange={(e) => {
-                          setHospital_District(" hospital_district", e.target.value);
+                          sethospital_District(e.target.value);
                         }}
                       />
                       <ErrorMessage
@@ -299,7 +297,7 @@ function FormHospital() {
                             : ""
                         }`}
                         onChange={(e) => {
-                          setHospital_Province(" hospital_province", e.target.value);
+                          sethospital_Province(e.target.value);
                         }}
                       />
                       <ErrorMessage
@@ -323,7 +321,7 @@ function FormHospital() {
                             : ""
                         }`}
                         onChange={(e) => {
-                          setHospital_Zipcode(" hospital_zipcode", e.target.value);
+                          sethospital_Zipcode(e.target.value);
                         }}
                       />
                       <ErrorMessage
@@ -346,7 +344,7 @@ function FormHospital() {
                             : ""
                         }`}
                         onChange={(e) => {
-                          setHospital_Latitude(" hospital_latitude", e.target.value);
+                          sethospital_Latitude(e.target.value);
                         }}
                       />
                       <ErrorMessage
@@ -370,7 +368,7 @@ function FormHospital() {
                             : ""
                         }`}
                         onChange={(e) => {
-                          setHospital_Logtitude(" hospital_logitude", e.target.value);
+                          sethospital_Logtitude(e.target.value);
                         }}
                       />
                       <ErrorMessage
@@ -394,8 +392,7 @@ function FormHospital() {
                             : ""
                         }`}
                         onChange={(e) => {
-                          setHospital_Phone_Number(
-                            "hospital_phone_number",
+                          sethospital_Phone_Number(
                             e.target.value
                           );
                         }}
@@ -406,6 +403,7 @@ function FormHospital() {
                         className="text-invalid"
                       />
                     </div>
+                    
                     </div>
                   <div className="d-flex justify-content-center mt-3">
                     <button type="submit" className="btn btn-primary mx-1">

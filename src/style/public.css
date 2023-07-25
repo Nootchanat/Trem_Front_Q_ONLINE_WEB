@@ -93,6 +93,22 @@
   font-family: sans-serif;
   text-align: center;
 }
+
+.containerRegister{
+
+  position: absolute;
+  top: 550px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background:#ffffff ;
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+
+  align-items: center;
+  
+  
+}
 .containerProfile{
 
   position: absolute;

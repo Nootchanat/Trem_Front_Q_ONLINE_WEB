@@ -22,10 +22,10 @@ import EditDepartment from "../view/private/setting/departmentType/EditDepartmen
 import FormAuthorities from "../view/private/setting/authorities/form/FormAuthorities";
 import EditAuthorities from "../view/private/setting/authorities/form/EditAuthorities"
 import HomePrivate from "../layout/private/HomePrivate";
-
+import FormCreateDoctor from "../view/private/setting/doctor/form/FormCreateDoctor";
 
 // public
-import FormRegister from "../view/authentication/register/FormRegister";
+import Register from "../components/Register/Register";
 import MainBook from "../view/public/book/MainBook";
 import EditProfile from "../view/public/editProfile/EditProfile";
 import EditPassword from "../view/public/editProfile/EditPassword";
@@ -77,7 +77,7 @@ function Router(props) {
                 path="/check-book-an-appointment"
                 element={<MainHistory />}
               />
-              <Route path="/register" element={<FormRegister />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/information" element={<MainInformation/>}/>
               <Route path="/information/:Id" element={<MainInformation/>}/>
               <Route path="/calendar" element={<Calendars/>} />
@@ -92,7 +92,7 @@ function Router(props) {
               <Route path="/showdepartmentAll" element={<ShowDepartmentAll/>} />
              
               <Route path="/detaildental" element={<Dental/>} />
-              <Route path="/detaildental/:Id" element={<Dental/>} /> 
+              <Route path="/detaildental/:DId" element={<Dental/>} /> 
               <Route path="/login" element={<LoginModal/>} /> 
               <Route path="/Profile" element={<Profile/>} /> 
 
@@ -114,7 +114,7 @@ function Router(props) {
               <Route path="/admin/open-schedule/form" element={<FormOpenSchedule />}/>
               <Route path="/admin/department-type"element={<MainDepartmentType />}/>
               <Route path="/admin/doctor" element={<MainDoctor />} />
-              <Route path="/admin/doctor/form/:doctorsId" element={<FormDoctor />} />
+              <Route path="/admin/doctor/form/:doctors_id" element={<FormDoctor />} />
               <Route path="/admin/user" element={<MainUser />} />
               <Route path="/admin/user/form" element={<FormUser />} />
               <Route path="/admin/authorities" element={<MainAuthorities />} />
@@ -122,6 +122,8 @@ function Router(props) {
               <Route path="/admin/edit-authorities" element={<EditAuthorities />} />
               <Route path="/admin/edit-department" element={<EditDepartment />} />
               <Route path="/admin/form-authorities" element={<FormAuthorities/>} />
+              <Route path="/admin/doctor/create/form/" element={<FormCreateDoctor />} />
+
               <Route path="*" element={<Redirect />} />
             </Routes>
           </PrivateLayout>

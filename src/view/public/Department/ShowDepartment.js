@@ -31,7 +31,7 @@ function ShowDepartment({
 
   useEffect(() => {
     axios
-      .get("https://amused-ant-umbrella.cyclic.app/apis/departments")
+      .get("https://json-six-lac.vercel.app/department")
       .then((res) => {
         //console.log(res);
         setEmpData(res.data);

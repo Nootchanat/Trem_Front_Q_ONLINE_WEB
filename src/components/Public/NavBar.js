@@ -92,6 +92,8 @@ const Navbar = () => {
     window.location.href = '/Profile'; // นำทางไปยังหน้า Profile
     setIsDrawerOpen(false); // ปิดเมนูแฮมเบอร์เกอร์
   };
+  
+  
 
 
   const renderMenuItems = () => {
@@ -127,7 +129,7 @@ const Navbar = () => {
               โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗
             </Link>
             {isDesktop && userData && (
-              <Typography variant="body1" component="div" sx={{ marginLeft: '420px' }}>
+              <Typography variant="body1" component="div" sx={{ marginLeft: '750px' }}>
                 Welcome {userData?.data.fullname}
               </Typography>
             )}

@@ -21,7 +21,7 @@ function Footer() {
 
   useEffect(() => {
     axios
-      .get("https://quaint-culottes-dove.cyclic.app/apis/hospitals/1")
+      .get("https://kind-red-centipede-cap.cyclic.app/apis/hospitals/1")
       .then((res) => {
         console.log(res.data);
         setHospital_Name(res.data.hospital_name);

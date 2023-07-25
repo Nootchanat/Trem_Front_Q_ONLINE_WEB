@@ -21,7 +21,7 @@ function Footer() {
 
   useEffect(() => {
     axios
-      .get("https://puce-enchanting-salmon.cyclic.app/apis/hospitals/" +1)
+      .get("https://long-pear-hummingbird-kit.cyclic.app/apis/hospitals/" +1)
       .then((res) => {
         console.log(res.data);
         setHospital_Name(res.data.hospital_name);

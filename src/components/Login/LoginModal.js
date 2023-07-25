@@ -5,6 +5,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { TextField, Button, Container, Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
+import { useNavigate } from 'react-router-dom';
 
 const StyledContainer = styled(Container)`
   display: flex;
@@ -35,11 +36,11 @@ const LoginModal = (props) => {
   const [id_card, setIdCard] = useState("");
   const [password, setPassword] = useState("");
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
-
+  const navigate = useNavigate();
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        "https://puce-enchanting-salmon.cyclic.app/apis/login",
+        "https://long-pear-hummingbird-kit.cyclic.app/apis/login",
         {
           id_card,
           password,
@@ -88,11 +89,14 @@ const LoginModal = (props) => {
     console.log("Reset password");
     setShowResetPasswordModal(false); // Close the reset password modal
   };
-
+  const handlecloseLogin = () => {
+    navigate('/');
+   
+  };
   return (
     <>
       <Modal show={props.show} onHide={() => props.setShow(false)} centered>
-        <Modal.Header closeButton>
+        <Modal.Header  onClick={handlecloseLogin}closeButton>
           <Modal.Title style={{ width: "100%", textAlign: "center" }}>
             เข้าสู่ระบบ
           </Modal.Title>
