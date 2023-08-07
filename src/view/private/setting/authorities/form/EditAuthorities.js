@@ -3,9 +3,7 @@ import Swal from 'sweetalert2';
 import { useNavigate,useLocation } from 'react-router-dom';
 
 import { Formik, Form, ErrorMessage } from 'formik';
-
-
-import Schema from '../../../../authentication/register/Validation';
+import Schema from './Validation';
 
 import {  updateAuthorities, getDetailAuthorities, createAuthorities} from '../../../../../service/Authorities.Service';
 

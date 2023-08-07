@@ -1,190 +1,479 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { TextSelect } from '../../../components/TextSelect';
-import PageSize from '../../../data/pageSize.json';
-import Pagination from 'react-js-pagination';
-import DateTh from '../../../components/DateTh';
-import StatusBook from '../../../data/statusBook.json';
+import React, { useRef, useState, useEffect } from "react";
+import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
+import Pagination from "react-js-pagination";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import { Formik } from "formik";
 // import { useReactToPrint } from 'react-to-print';
+import Swal from "sweetalert2";
 
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
 
-function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, deleteData }) {
-  const [dataQ, setDataQ] = useState(null);
-  const [viewhistory, setViewhistory] = useState(null);
-  const componentRef = useRef();
+import Spinner from "react-bootstrap/Spinner";
+
+function ShowData() {
   const navigate = useNavigate();
-  const pageStyle = `
-  @page {
-    size: 4in 4in
-  }`;
+  const [pageData, setPageData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [userData, setUserData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [queueList, setQueueList] = useState([]);
+  const [selectedTable, setSelectedTable] = useState("queue");
+  const [appointmentList, setAppointmentList] = useState([]);
+  const [editModalShow, setEditModalShow] = useState(false);
+  const [selectedQueueData, setSelectedQueueData] = useState(null);
+  const [queue, setQueue] = useState({});
+  console.log(queue);
 
   useEffect(() => {
-    axios
-      .get("https://json-six-lac.vercel.app/queue")
-      .then((res) => {
-        console.log(res);
-        setViewhistory(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // ตรวจสอบสถานะการล็อกอินเมื่อโหลดหน้า Profile
+    const storedUserData = localStorage.getItem("userData");
+    const storedIsLoggedIn = storedUserData ? true : false;
+    setIsLoggedIn(storedIsLoggedIn);
+
+    if (storedIsLoggedIn) {
+      // ถ้าล็อกอินแล้ว ดึงข้อมูลผู้ใช้จาก localStorage
+      const userDataFromLocalStorage = JSON.parse(storedUserData);
+      setUserData(userDataFromLocalStorage);
+      axios
+        .get(
+          `https://lazy-gray-shrimp-suit.cyclic.app/apis/patients?id_card=${userDataFromLocalStorage.data.id_card}`
+        )
+        .then((response) => {
+          console.log("Response data:", response.data);
+
+          const matchedUser = response.data.find(
+            (user) => user.id_card === userDataFromLocalStorage.data.id_card
+          );
+
+          if (matchedUser) {
+            const { users_id, prefix_name, first_name, last_name, id_card } =
+              matchedUser;
+            // อัปเดตข้อมูลใน state queue
+            setQueue((prevQueue) => ({
+              ...prevQueue,
+              users_id: users_id,
+            }));
+
+            // อัปเดตข้อมูลใน state userData
+            setUserData({
+              ...userData,
+              users_id: users_id,
+              prefix_name,
+              first_name,
+              last_name,
+              id_card,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
   }, []);
 
-//   const print = useReactToPrint({
-//     content: () => componentRef.current,
-//     documentTitle: "Q_Online",
-//     pageStyle: pageStyle,
-//   });
+  useEffect(() => {
+    const fetchUserQueue = async () => {
+      try {
+        if (userData && userData.users_id) {
+          const response = await axios.get(
+            "https://lazy-gray-shrimp-suit.cyclic.app/apis/queue",
+            {
+              params: {
+                users_id: userData.users_id,
+              },
+            }
+          );
+          setQueueList(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching user queue:", error);
+      }
+    };
 
+    fetchUserQueue();
+  }, [userData]);
+
+  // สร้างฟังก์ชันเพื่อกำหนดคิวที่เลือกใน Modal แก้ไข
+  const handleEditClick = (queue) => {
+    setSelectedQueueData(queue); // กำหนดค่ารายการคิวที่ถูกเลือกแก้ไข
+    setEditModalShow(true); // เปิด Modal แก้ไข
+  };
+
+  const handleEditSubmit = async (values) => {
+    try {
+      // ตรวจสอบความถูกต้องของข้อมูลที่ผู้ใช้กรอกเข้ามา
+
+      // อัปเดตข้อมูลที่ต้องการแก้ไขใน API
+      const updatedData = {
+        ...selectedQueueData,
+        symptom: values.symptom,
+        department_id: values.department_id,
+        department_name: values.department_name,
+        queue_date: values.queue_date,
+      };
+
+      // ส่งค่าไปยัง API สำหรับการแก้ไขคิว
+      await axios.put(
+        `https://lazy-gray-shrimp-suit.cyclic.app/apis/queue/${selectedQueueData.queue_id}`,
+        updatedData
+      );
+
+      // อัปเดตรายการคิวใน state หลังจากแก้ไขเรียบร้อย
+      setQueueList((prevQueueList) =>
+        prevQueueList.map((queue) =>
+          queue.queue_id === selectedQueueData.queue_id ? updatedData : queue
+        )
+      );
+
+      // ปิด Modal แก้ไข
+      setEditModalShow(false);
+
+      // แสดงตัวแจ้งเตือนการแก้ไขสำเร็จ
+      Swal.fire({
+        icon: "success",
+        title: "แก้ไขคิวสำเร็จ",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      console.error("Error editing queue:", error);
+      // แสดงตัวแจ้งเตือนเมื่อการแก้ไขไม่สำเร็จ
+      Swal.fire({
+        icon: "error",
+        title: "การแก้ไขคิวไม่สำเร็จ",
+        text: "เกิดข้อผิดพลาดในการแก้ไขคิว กรุณาลองใหม่อีกครั้ง",
+        showConfirmButton: true,
+      });
+    }
+  };
+  const formatDateToAPI = (dateString) => {
+    const [day, month, year] = dateString.split("-");
+    return `${year}-${month}-${day}`;
+  };
+  const removeQueue = async (users_id, queue_date) => {
+    Swal.fire({
+      title: "คุณแน่ใจที่จะยกเลิกการจองคิว ?",
+      text: "คุณต้องการยกเลิกการจองคิวนี้ใช่หรือไม่?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "ใช่, ยกเลิกคิว",
+      cancelButtonText: "ไม่, ยกเลิก",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const formattedDate = formatDateToAPI(queue_date);
+          const response = await axios.delete(
+            `https://lazy-gray-shrimp-suit.cyclic.app/apis/queue/${users_id}/${formattedDate}`
+          );
+
+          if (response.data.affectedRows > 0) {
+            // หากลบสำเร็จ ทำการอัปเดตข้อมูลใหม่ด้วยการอัปเดต state หรือที่เก็บข้อมูลที่ใช้ในการแสดงผล
+            const updatedQueueList = queueList.filter(
+              (queue) =>
+                queue.users_id !== users_id || queue.queue_date !== queue_date
+            );
+            setQueueList(updatedQueueList); // อัปเดต state ด้วยข้อมูลใหม่
+
+            Swal.fire({
+              title: "ไม่พบคิวที่ต้องการยกเลิก",
+              text: "ไม่พบคิวที่ตรงกับข้อมูลที่ระบุ",
+              icon: "error",
+            });
+          } else {
+            Swal.fire({
+              title: "ยกเลิกการจองคิวสำเร็จ",
+              text: "คิวถูกยกเลิกแล้ว",
+              icon: "success",
+              timer: 1500,
+            }).then(() => {
+              window.location.reload(); // รีโหลดหน้าใหม่หลังจากที่ยืนยันการยกเลิกคิวสำเร็จ
+            });
+          }
+        } catch (error) {
+          console.error("Error removing queue:", error);
+          Swal.fire({
+            title: "เกิดข้อผิดพลาด",
+            text: "เกิดข้อผิดพลาดในการยกเลิกคิว",
+            icon: "error",
+          });
+        }
+      }
+    });
+  };
+
+  const formatDate = (dateString) => {
+    const dateObj = new Date(dateString);
+    const year = dateObj.getFullYear();
+    let month = dateObj.getMonth() + 1;
+    if (month < 10) {
+      month = "0" + month;
+    }
+    let day = dateObj.getDate();
+    if (day < 10) {
+      day = "0" + day;
+    }
+    return `${year}-${month}-${day}`;
+  };
 
   return (
-    <div className="w-full">
-      <div className="d-flex justify-content-between mb-2">
-        <div className="w-pagesize">
-          <TextSelect
-            id="pagesize"
-            name="pagesize"
-            options={PageSize}
-            value={PageSize.filter((a) => a.id === pagin.pageSize)}
-            onChange={(item) => {
-              changePageSize(item.id);
-            }}
-            getOptionLabel={(z) => z.label}
-            getOptionValue={(x) => x.id}
-          />
-        </div>
-        <div>
-          <button
-            type="button"
-            className="btn btn-success"
-            onClick={() => {
-              navigate('/author/book-an-appointment');
-            }}
-          >
-            <i className="fa-solid fa-plus mx-1"></i>
-            เพิ่ม
-          </button>
-        </div>
-      </div>
+    <div>
       <div className="overflow-auto">
         <table className="table">
           <thead>
-          <tr className="table-success">
-          <th scope="col" style={{ width: '2%' }}>
-            ลำดับ
-          </th>
-          <th scope="col" style={{ width: '10%' }}>
-          วันที่จอง
-          </th>
-          <th scope="col" style={{ width: '20%' }}>
-          วันที่/เวลาที่จองคิว
-          </th>
-          <th scope="col" style={{ width: '10%' }}>
-          อาการเบื้องต้น
-          </th>
-          <th scope="col" style={{ width: '10%' }}>
-          เลขบัตรประชาชน
-          </th>
-          <th scope="col" style={{ width: '5%' }}>
-          สถานะคิว
-          </th>
-          <th scope="col" style={{ width: '7%' }}>
-          ลำดับเจ้าหน้าที่
-          </th>
-          <th scope="col" style={{ width: '9%' }}>
-          ลำดับแบบสอบถาม
-          </th>
-          <th scope="col" style={{ width: '15%' }}>
-          ประเมินคะแนนการใช้บริการ
-          </th>
-        </tr>
+            <tr className="table-success">
+              <th scope="col" style={{ width: "5%", textAlign: "center" }}>
+                ลำดับ
+              </th>
+              <th scope="col" style={{ width: "15%", textAlign: "center" }}>
+                อาการเบื้องต้น
+              </th>
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+                แผนก
+              </th>
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+                วันที่เข้ารับการรักษา
+              </th>
+              <th scope="col" style={{ width: "15%", textAlign: "center" }}>
+                วันที่จอง
+              </th>
+
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+                สถานะ
+              </th>
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+                จัดการ
+              </th>
+            </tr>
           </thead>
+
           <tbody>
-              {viewhistory &&
-                viewhistory.map((item) => {
-                  return (
-                    <tr key={item.id}>
-                    <td>{item.id}</td>
-                      <td>{item.queue_date}</td>
-                      <td>{item.create_at}</td>
-                      <td>{item.symptom}</td>
-                      <td>{item.id_card}</td>
-                      <td>{item.queue_status_id}</td>
-                      <td>{item.authorities_id}</td>
-                      <td>{item.questionaire_id}</td>
-                    <td>
-                       
-                        <button
+            {queueList
+              .filter((queue) => queue.users_id === userData?.users_id)
+              .slice(0, 20) // เลือกแสดงเฉพาะ 10 รายการแรก
+              .map((queue, index) => (
+                <tr key={queue.id}>
+                  <td style={{ textAlign: "center" }}>{index + 1}</td>{" "}
+                  {/* แสดงลำดับเริ่มจาก 1 */}
+                  <td style={{ textAlign: "center" }}>{queue.symptom}</td>
+                  <td style={{ textAlign: "center" }}>
+                    {queue.department_name}
+                  </td>
+                  <td style={{ textAlign: "center" }}>{queue.queue_date}</td>
+                  <td style={{ textAlign: "center" }}>{queue.create_at}</td>
+                  <td style={{ textAlign: "center" }}>
+                    {queue.queue_status_name}
+                  </td>
+                  <td style={{ textAlign: "center" }}>
+                    <button
                       type="button"
-                      className="btn btn-primary"
+                      className="btn btn-warning text-white mx-1 mt-1"
+                      onClick={() => handleEditClick(queue)} // เรียกใช้ฟังก์ชันเมื่อคลิกแก้ไข
+                    >
+                      <i className="fa-solid fa-pen-to-square"></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-danger text-white mx-1 mt-1"
                       onClick={() => {
-                        navigate('/questionnaire', { state: item.id });
+                        removeQueue(queue.users_id, queue.queue_date);
                       }}
                     >
-                    ประเมินความพึงพอใจ
-                    </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          <tbody>
-            {data.length === 0 ? (
-              <tr>
-                {/* <td colSpan={5}>
-                  <div className="text-center text-danger">-- ไม่พบข้อมูล --</div>
-                </td> */}
-              </tr>
-            ) : (
-              data.map((item, index) => (
-                <tr key={item.id}>
-                  <td>{(pagin.currentPage - 1) * pagin.pageSize + (index + 1)}</td>
-                  <td>{item.code}</td>
-                  <td>{item.fullname_doctor}</td>
-                  <td>{item.treatment_type_name}</td>
-                  <td>
-                    <DateTh date={item.created_date} />
-                  </td>
-                  <td>
-                    <DateTh date={item.open_date} />
-                  </td>
-                  <td>{item.number}</td>
-                  <td>
-                    <StatusBook status={item.status} />
-                  </td>
-                  <td>
-                  
-                    <button type="button" className='btn btn-info' onClick={() => {
-                      //print();
-                      setDataQ(item);
-                    }}
-                    >
-
-                      <i className="fa-solid fa-print text-white"></i>
+                      <i className="fa-solid fa-trash-can"></i>
                     </button>
                   </td>
                 </tr>
-              ))
-            )}
+              ))}
           </tbody>
+
+          <Modal
+            show={editModalShow}
+            onHide={() => setEditModalShow(false)}
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title
+                style={{ width: "100%", textAlign: "center", fontSize: "25px" }}
+              >
+                แก้ไขจองคิว
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Formik
+                initialValues={{
+                  symptom: selectedQueueData ? selectedQueueData.symptom : "",
+                  department_id: selectedQueueData
+                    ? selectedQueueData.department_id
+                    : "",
+                  queue_date: selectedQueueData
+                    ? selectedQueueData.queue_date
+                    : "",
+                }}
+                onSubmit={handleEditSubmit}
+              >
+                {({ handleSubmit, handleChange, values }) => (
+                  <Form onSubmit={handleSubmit}>
+                    {isLoggedIn && userData && (
+                      <div className="col-12">
+                        <div className="row">
+                          <div className="col-12 px-1 mt-1">
+                            <label
+                              className="label-content"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              เลขบัตรประชาชน :{" "}
+                            </label>
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              {" "}
+                              {userData.id_card}
+                            </label>
+                          </div>
+                          <div className="col-12 px-1 mt-3">
+                            <label
+                              className="label-content"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              ชื่อ :{" "}
+                            </label>
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              {" "}
+                              {userData.prefix_name} {userData.first_name}{" "}
+                              {userData.last_name}
+                            </label>
+                          </div>
+
+                          <Form.Group className="col-12 px-1 mt-3">
+                            <Form.Label
+                              className="label-content"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              อาการเบื้องต้น
+                            </Form.Label>
+                            <label className="red">*</label>
+                            <Form.Control
+                              name="symptom" // ต้องตรงกับชื่อใน state queue
+                              type="text"
+                              placeholder="กรุณาระบุอาการเบื้องต้น"
+                              value={values.symptom}
+                              onChange={handleChange}
+                            />
+                          </Form.Group>
+                          <small className="red">
+                            *
+                            แก้ไขเฉพาะกรณีอาการเบื้องต้นที่ไม่ชัดเจนหรือพิมพ์ผิดเท่านั้น
+                          </small>
+                          <div className="col-6 px-1 mt-3">
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              แผนก
+                            </label>
+                            <label className="red">*</label>
+
+                            <select
+                              class="form-select"
+                              name="department_id"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                              value={values.department_id}
+                              disabled={true}
+                              aria-label="Default select example"
+                            >
+                              <option selected>เลือกแผนก</option>
+                              <option value="1">ทันตกรรม</option>
+                              <option value="2">กุมารเวช</option>
+                              <option value="3">ทั่วไป</option>
+                              <option value="4">สูติ-นรีเวช</option>
+                              <option value="6">ศัลยกรรม</option>
+                              <option value="7">หัวใจ</option>
+                              <option value="8">ผิวหนัง</option>
+                              <option value="23">จักษุ</option>
+                              <option value="26">ความงาม</option>
+                            </select>
+                            {/* <ErrorMessage
+                            component="div"
+                            name="department_id"
+                            className="text-invalid"
+                          /> */}
+                          </div>
+
+                          <div className="col-6 px-1 mt-3">
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              วันที่เข้ารับการรักษา
+                            </label>
+                            <label className="red">*</label>
+                            <input
+                              name="queue_date"
+                              type="date"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                              className="form-input"
+                              value={
+                                values.queue_date
+                                  ? formatDate(values.queue_date)
+                                  : ""
+                              }
+                              readOnly={true}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </Form>
+                )}
+              </Formik>
+              <small className="red">
+                * หากผู้ป่วยเลือกแผนกผิดหรือจองคิววันที่เข้ารับการรักษาผิด
+                จะต้องยกเลิกการจองคิวเดิมและจองคิวใหม่เท่านั้น
+              </small>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={handleEditSubmit}
+              >
+                บันทึกการแก้ไข
+              </button>
+            </Modal.Footer>
+          </Modal>
         </table>
       </div>
-      <div className="d-flex justify-content-between">
-        <div>จำนวน {pagin.totalRow} รายการ</div>
-        <div>
-          <Pagination
-            activePage={pagin.currentPage}
-            itemsCountPerPage={pagin.pageSize}
-            totalItemsCount={pagin.totalRow}
-            pageRangeDisplayed={pagin.totalPage}
-            onChange={(page) => {
-              changePage(page);
-            }}
-          />
-        </div>
-      </div>
-      
     </div>
   );
 }

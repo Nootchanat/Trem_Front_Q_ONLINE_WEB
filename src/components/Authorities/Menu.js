@@ -32,7 +32,7 @@ export const Menu = [
     id: 5,
     title: 'การประเมินการจองคิว',
     icon: 'fa-solid fa-address-book',
-    pathname: '/view/questionnaire',
+    pathname: '/view/Question',
     type: 1,
   },
 ];

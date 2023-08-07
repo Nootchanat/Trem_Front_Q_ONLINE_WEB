@@ -8,39 +8,42 @@ import Redirect from "../view/error/Redirect";
 import AuthoritiesLayout from "../layout/authorities/AuthoritiesLayout";
 
 //private
-import MainDepartmentType from "../view/private/setting/departmentType/MainDepartmentType";
+
 import MainDoctor from "../view/private/setting/doctor/MainDoctor";
 import FormDoctor from "../view/private/setting/doctor/form/FormDoctor";
 import MainOpenSchedule from "../view/private/openSchedule/MainOpenSchedule";
 import FormOpenSchedule from "../view/private/openSchedule/form/FormOpenSchedule";
 import MainUser from "../../src/view/private/setting/user/MainUser";
-import FormUser from "../view/private/setting/user/form/FormUser";
+import FormCreateUser from "../view/private/setting/user/form/FormCreateUser";
 import MainHospital from "../view/private/openSchedule/form/DataHospital/MainHospital";
 import FormHospital from "../view/private/openSchedule/form/DataHospital/FormHospital";
 import MainAuthorities from "../view/private/setting/authorities/MainAuthorities";
-import EditDepartment from "../view/private/setting/departmentType/EditDepartment"
 import FormAuthorities from "../view/private/setting/authorities/form/FormAuthorities";
 import EditAuthorities from "../view/private/setting/authorities/form/EditAuthorities"
 import HomePrivate from "../layout/private/HomePrivate";
 import FormCreateDoctor from "../view/private/setting/doctor/form/FormCreateDoctor";
+import FormUpdateUser from "../view/private/setting/user/form/FormUpdateUser";
+import MainDepartmentType from "../view/private/setting/departmentType/MainDepartmentType";
+import FormDepartment from "../view/private/setting/departmentType/form/FormDepartment";
+import EditDepartment from "../view/private/setting/departmentType/form/EditDepartment";
 
 // public
 import Register from "../components/Register/Register";
 import MainBook from "../view/public/book/MainBook";
-import EditProfile from "../view/public/editProfile/EditProfile";
-import EditPassword from "../view/public/editProfile/EditPassword";
+import EditProfile from "../view/public/Profile/EditProfile";
 import Queue from "../view/public/queue/Queue";
-import MainHistory from "../view/public/history/MainHistory";
+import TableBooking from "../view/public/history/TableBooking";
 import Home from "../layout/public/Home";
 import CheckQueue from "../view/public/queue/CheckQueue";
 import Questionaire from "../view/public/questionnaire/Questionnaire";
-import ForgetPassword from '../view/public/editProfile/ForgetPassword';
-import Calendars from "../view/public/Calendars";
-import ShowDepartment from '../view/public/Department/ShowDepartment'
+import Calendars from "../view/public/Calendars"; 
 import ShowDepartmentAll from "../view/public/Department/ShowDepartmentAll";
 import Dental from "../view/public/Department/DetailDepartment/dental/Dental";
 import LoginModal from "../components/Login/LoginModal";
 import Profile from "../view/public/Profile/Profile"
+import AllQueue from "../view/public/AllQueue/AllQueue";
+
+
 
 
 import MainInformation from "../view/public/information/MainInformation";
@@ -50,11 +53,10 @@ import MainBookAuthor from "../view/authorities/book/MainBookAuthor";
 import MainHistoryAuthor from "../view/authorities/history/MainHistoryAuthor";
 import ManageBook from '../view/authorities/Main/ManageBook'
 import ViewQuestion from "../view/authorities/view_questionnaire/ViewQuestion";
+import HomeAuthorities from "../layout/authorities/HomeAuthorities";
 
-import EditProfileAuthor from "../view/authorities/Profile/EditProfileAuthor";
-import ForgetPasswordAuthor from "../view/authorities/Profile/ForgetPasswordAuthor";
-import EditPasswordAuthor from "../view/authorities/Profile/EditPasswordAuthor";
 import OpenQueue from "../view/authorities/open-queue/OpenSchedule";
+
 
 
 
@@ -72,23 +74,22 @@ function Router(props) {
             <Routes>
               <Route path="/" element={<Home />} />
               
-              <Route path="/book-an-appointment" element={<MainBook />} />  
-              <Route
-                path="/check-book-an-appointment"
-                element={<MainHistory />}
-              />
+              <Route path="/book-an-appointment/:users_id" element={<MainBook/>} />  
+
+              <Route path="/history/:users_id" element={<TableBooking/>}/>
               <Route path="/register" element={<Register />} />
               <Route path="/information" element={<MainInformation/>}/>
               <Route path="/information/:Id" element={<MainInformation/>}/>
               <Route path="/calendar" element={<Calendars/>} />
-              <Route path="/edit-profile" element={<EditProfile />} />
-              <Route path="/edit-password" element={<EditPassword />} />
+              <Route path="/edit-profile/:users_id" element={<EditProfile />} />
+              <Route path="/AllQueue" element={<AllQueue />} />
               <Route path="/check-queue" element={<CheckQueue />} />
               <Route path="/Q_user" element={<Queue />} />
               <Route path="/questionnaire" element={<Questionaire/>} />
-              <Route path="/forgetPassword" element={<ForgetPassword/>} />
-              <Route path="/view-history" element={<MainHistory />} /> 
-                <Route path="/showdepartment" element={<ShowDepartment/>} />
+             
+          
+              
+             
               <Route path="/showdepartmentAll" element={<ShowDepartmentAll/>} />
              
               <Route path="/detaildental" element={<Dental/>} />
@@ -112,17 +113,21 @@ function Router(props) {
               <Route path="/admin/hospital/form/:FId" element={<FormHospital />}/>
               <Route path="/admin/open-schedule"element={<MainOpenSchedule />}/>
               <Route path="/admin/open-schedule/form" element={<FormOpenSchedule />}/>
-              <Route path="/admin/department-type"element={<MainDepartmentType />}/>
+              
               <Route path="/admin/doctor" element={<MainDoctor />} />
               <Route path="/admin/doctor/form/:doctors_id" element={<FormDoctor />} />
               <Route path="/admin/user" element={<MainUser />} />
-              <Route path="/admin/user/form" element={<FormUser />} />
+              <Route path="/admin/user/create/form" element={<FormCreateUser/>} />
               <Route path="/admin/authorities" element={<MainAuthorities />} />
               <Route path="/admin/authorities/form" element={<FormAuthorities />} />
               <Route path="/admin/edit-authorities" element={<EditAuthorities />} />
-              <Route path="/admin/edit-department" element={<EditDepartment />} />
+              
               <Route path="/admin/form-authorities" element={<FormAuthorities/>} />
               <Route path="/admin/doctor/create/form/" element={<FormCreateDoctor />} />
+              <Route path="/admin/user/form/:users_id" element={<FormUpdateUser />} />
+              <Route path="/admin/department-type"element={<MainDepartmentType />}/>
+              <Route path="/admin/department/form/" element={<FormDepartment />} />
+              <Route path="/admin/edit-department/form/:department_id" element={<EditDepartment />} />
 
               <Route path="*" element={<Redirect />} />
             </Routes>
@@ -134,16 +139,16 @@ function Router(props) {
           <AuthoritiesLayout>
             <Routes>
               
-              <Route path="/author" element={<h1>เจ้าหน้าที่</h1>} />
+            <Route path="/" element={<HomeAuthorities/>} />
+            <Route path="/author/Home_authorities" element={<HomeAuthorities/>} />
               <Route path="/author/book-an-appointment"element={<MainBookAuthor/>}/>
               <Route path="/author/history"element={<MainHistoryAuthor />}/>
               <Route path="/view/Question" element={<ViewQuestion />} />
               <Route path="/author/Manage" element={<ManageBook />} />
               {/* <Route path="/author/Main/View" element={<ViewAssessment/>} /> */}
-          
-              <Route path="/author/profile" element={<EditProfileAuthor/>} />
-              <Route path="/author/forget-password" element={<ForgetPasswordAuthor/>} />
-              <Route path="/author/edit-password" element={<EditPasswordAuthor/>} />
+              
+
+      
               <Route path="/author/open-queue" element={<OpenQueue/>} />
             </Routes>
           </AuthoritiesLayout>

@@ -41,18 +41,20 @@
   color: #000;
   align-items: center;
   padding: 5px;
-  margin-top: 5px;
+  margin-top: 15px;
 }
 
 .image-card{
 margin-top: 15p;
-width: 150px;
+width: 100px;
 margin-left: 230px;
 }
 
 .button-card{
-  margin-top: 20px;
-  margin-left: 165px;
+  margin-top: 10px;
+  margin-left: 90px;
+  width: 100px;
+  height: 60px;
   
 }
 
@@ -60,7 +62,7 @@ margin-left: 230px;
   line-height: 25px;
   justify-content: space-between;
   margin: 25px;
-  margin-top: 25px;
+  margin-top: 30px;
   padding: 15px;
 }
 

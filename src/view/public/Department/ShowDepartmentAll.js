@@ -14,7 +14,7 @@ useEffect(() => {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        "https://shy-jade-clownfish.cyclic.app/apis/departments"
+        "https://lazy-gray-shrimp-suit.cyclic.app/apis/departments"
       );
 
       console.log(response.data); // Check the response data
@@ -48,7 +48,7 @@ useEffect(() => {
                   {department.department_name}
                 </h5>
                
-                <div className="button-card">
+                <div className="button-card1">
                   <Link
                     to={`/detaildental/${department.department_id}`}
                     className="btn btn-success mx-1"

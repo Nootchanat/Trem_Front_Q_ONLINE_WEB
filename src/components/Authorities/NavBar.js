@@ -8,7 +8,7 @@ import { Menu } from './Menu';
 import { checkActive } from '../../helper/Check';
 import { connect } from 'react-redux';
 import { AUTHEN, USERINFO ,AUTHORITIES } from '../../actions/Authen';
-import Login from '../../view/authentication/login/Login';
+
 
 function NavBar(props) {
   const location = useLocation();
@@ -59,7 +59,7 @@ function NavBar(props) {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <Login show={show} setShow={setShow} />
+     
     </header>
   );
 }

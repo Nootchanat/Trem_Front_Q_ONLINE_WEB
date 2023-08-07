@@ -1,3 +1,5 @@
+// DateTh.js
+
 import React from 'react';
 
 function DateTh({ date = null, format = '' }) {
@@ -9,7 +11,6 @@ function DateTh({ date = null, format = '' }) {
     var day = date.substring(8, 10);
     var month = date.substring(5, 7);
     var year = date.substring(0, 4);
-    var time = date.substring(11, 16);
 
     if (month === '01') {
       month_name = 'มกราคม';
@@ -64,24 +65,9 @@ function DateTh({ date = null, format = '' }) {
 
   function dateType(format) {
     switch (format) {
-      case 'dd MMMM yyyy HH:mm TH':
-        return `${day} ${month_name} ${parseInt(year) + 543} ${time}`;
-      case 'dd MMMM yyyy เวลา HH:mm TH':
-        return `${day} ${month_name} ${parseInt(year) + 543} เวลา ${time}`;
-      case 'dd MMMM yyyy TH':
+      case 'dd MMMM yyyy':
         return `${day} ${month_name} ${parseInt(year) + 543}`;
-      case 'dd MMMM yyyy EN':
-        return `${day} ${month_nameEn} ${parseInt(year)}`;
-      case 'dd/mm/yyyy TH':
-        return `${day}/${month}/${parseInt(year) + 543}`;
-      case 'HH:mm':
-        return { time };
-      case 'dd/mm/yyyy HH:mm TH':
-        return `${day}/${month}/${parseInt(year) + 543} ${time}`;
-      case 'MMMM yyyy TH':
-        return `${month_name} ${parseInt(year) + 543}`;
-      case 'dd MM yyyy TH':
-        return `${day} ${month_sname} ${parseInt(year) + 543}`;
+      // คุณสามารถเพิ่มเงื่อนไขของรูปแบบอื่น ๆ ตามต้องการได้
       default:
         return `${day}/${month}/${parseInt(year) + 543}`;
     }

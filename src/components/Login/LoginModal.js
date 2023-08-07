@@ -40,7 +40,7 @@ const LoginModal = (props) => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        "https://long-pear-hummingbird-kit.cyclic.app/apis/login",
+        "https://lazy-gray-shrimp-suit.cyclic.app/apis/login",
         {
           id_card,
           password,

@@ -1,18 +1,11 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-// import {
-//   faHospital,
-//   faCalendarDays,
-//   faStethoscope,
-//   faBook,
-//   faPenToSquare,
-// } from "@fortawesome/free-solid-svg-icons";
 import { faHospital } from "@fortawesome/free-solid-svg-icons";
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
 import { faStethoscope } from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faRectangleList } from "@fortawesome/free-solid-svg-icons";
+import { faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Carousel from "react-bootstrap/Carousel";
 import Treatment from "../../image/Treatment.png";
@@ -23,15 +16,19 @@ import c1 from "../../image/c1.jpg";
 import c2 from "../../image/c2.jpg";
 import c3 from "../../image/c3.png";
 import c4 from "../../image/c4.png";
-import sl1 from "../../image/sl1.png";
-import sl2 from "../../image/sl2.png";
+import HomeSlide from "../../image/HomeSlide.png";
+import MainBook from "../../view/public/book/MainBook";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import "../../style/Home.css";
 
 function Home() {
+  
   // เพิ่ม state สำหรับตรวจสอบสถานะการล็อกอิน
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [showMainBook, setShowMainBook] = useState(false);
 
   // ฟังก์ชันสำหรับตรวจสอบล็อกอิน
   const checkLogin = () => {
@@ -42,44 +39,43 @@ function Home() {
     setIsLoggedIn(isLoggedIn);
   };
 
-  // ฟังก์ชันสำหรับล็อกเอาท์
-  const handleLogout = () => {
-    // เพื่อตัวอย่างในกรณีนี้เราจะลบข้อมูลใน localStorage
-    // และกำหนดค่า isLoggedIn เป็น false
-    localStorage.removeItem("userData");
-    setIsLoggedIn(false);
-  };
-
   // เรียกใช้ฟังก์ชัน checkLogin เมื่อโหลดหน้า Home เพื่อตรวจสอบสถานะการล็อกอิน
   useEffect(() => {
     checkLogin();
   }, []);
 
-  // สร้างฟังก์ชันสำหรับตรวจสอบสถานะการล็อกอินก่อนทำการจองคิว
-  const handleBooking = () => {
-    if (isLoggedIn) {
-      // ทำการจองคิว...
-      navigate("/book-an-appointment");
-      console.log("Booking is allowed!");
-    } else {
-      // ถ้ายังไม่ได้ล็อกอิน ให้นำไปหน้าเข้าสู่ระบบ
-      console.log("Please log in to book an appointment.");
-      // ตัวอย่างเช่นนำไปยังหน้าเข้าสู่ระบบ
-      navigate("/login");
-    }
-  };
-  const handleinformation = () => {
-    navigate("/information");
-  };
+    
+
+  
+
   const handleDepartment = () => {
     navigate("/showdepartmentAll");
   };
-  const handleQuestionnaire = () => {
-    navigate("/questionnaire");
+
+  const handleListQueue = () => {
+    navigate("/history/:users_id");
   };
-  const handleDath = () => {
-    navigate("/calendars");
+
+  const handleAllQueueList = () => {
+    navigate("/AllQueue");
   };
+  
+
+  const handleMainBookPopup = () => {
+    // ตรวจสอบสถานะการล็อกอินก่อนเปิดโมดัล
+    if (!isLoggedIn) {
+      Swal.fire({
+        icon: "warning",
+        title: "คุณยังไม่ได้เข้าสู่ระบบ",
+        text: "กรุณาเข้าสู่ระบบก่อนทำการจองคิว",
+        showConfirmButton: true,
+      });
+      return;
+    }
+  
+    setShowMainBook(true);
+  };
+  
 
  
   return (
@@ -88,104 +84,118 @@ function Home() {
         <div class="container5">
           <div
             className="card justify-content-center"
-            style={{ height: "195px" }}
+            style={{ height: "200px" }}
           >
             <div className="row justify-content-xl-center">
              
-              <div className="col">
-                <FontAwesomeIcon
-                  onClick={handleDath}
-                  icon={faCalendarDays}
-                  class="fas fa-calendarDays"
-                  style={{ color: "#4b86d2", marginTop: "60px" }}
-                />
-                <a
-                  onClick={handleDath}
-                  style={{ color: "#4b86d2", cursor: "pointer" }}
-                >
-                  ปฏิทินการจอง
-                </a>
-              </div>
-              <div className="col">
-                <FontAwesomeIcon
-                  onClick={handleinformation}
-                  icon={faHospital}
-                  class="fas fa-hospital"
-                  style={{ color: "#4b86d2", marginTop: "60px" }}
-                />
-                <a
-                  onClick={handleinformation}
-                  style={{ color: "#4b86d2", cursor: "pointer" }}
-                >
-                  ข้อมูลทั่วไปของโรงพยาบาล
-                </a>
-              </div>
+             
 
               <div className="col">
+                <div className="Home-icon">
                 <FontAwesomeIcon
                   onClick={handleDepartment}
                   icon={faBook}
                   class="fas fa-book-medical"
-                  style={{ color: "#4b86d2", marginTop: "60px" }}
-                />
+                  style={{ color: "#4b86d2", marginTop: "60px", width : "80px" }}
+                /></div>
+                <div className="Nameicon">
                 <a
                   onClick={handleDepartment}
                   style={{ color: "#4b86d2", cursor: "pointer" }}
                 >
-                  แผนก
+                  <h4 className="title-name-home mt-3 mx-5">
+                    แผนก
+                  </h4>
+                  
                 </a>
+                </div>
+              </div>
+              
+               <div className="col">
+                <div className="Home-icon">
+                <FontAwesomeIcon
+                  onClick={handleMainBookPopup}
+                  icon={faStethoscope}
+                  class="fas fa-calendarDays"
+                  style={{ color: "#4b86d2", marginTop: "60px", width : "80px" }}
+                /></div>
+                 
+                <div className="Nameicon">
+                  <a
+                  onClick={handleMainBookPopup}
+                  style={{ color: "#4b86d2", cursor: "pointer" }}
+                >
+                  <h4 className="title-name-home mt-3 mx-5">
+                    จองคิว
+                  </h4>
+                  
+                </a>
+                </div>
+                {showMainBook && (
+        <MainBook show={showMainBook} setShow={setShowMainBook} />
+      )}
               </div>
               {isLoggedIn && (
-                <div className="col">
-                  <FontAwesomeIcon
-                    icon={faStethoscope}
-                    onClick={handleBooking}
-                    class="fas fa-stethoscope"
-                    style={{ color: "#4b86d2", marginTop: "70px" }}
-                  />
-                  <a
-                    onClick={handleBooking}
-                    style={{ color: "#4b86d2", cursor: "pointer" }}
-                  >
-                    จองคิว
-                  </a>
-                </div>
-              )}
-              {/* เมนูประเมินความพึงพอใจจะแสดงเมื่อผู้ใช้ล็อกอินเท่านั้น */}
-              {isLoggedIn && (
-                <div class="col">
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    class="fas fa-hospital fa-xs"
-                    style={{ color: "#4b86d2", marginTop: "50px" }}
-                  />
-                  <a
-                    onClick={handleQuestionnaire}
-                    style={{ color: "#4b86d2", cursor: "pointer" }}
-                  >
-                    ประเมินความพึงพอใจ
-                  </a>
-                </div>
-              )}
+        <div className="col">
+        <div className="Home-icon">
+        <FontAwesomeIcon
+          onClick={handleListQueue}
+          icon={faList}
+          class="fa-solid fa-list"
+          style={{ color: "#4b86d2", marginTop: "60px", width : "80px" }}
+        /></div>
+        <div className="Nameicon">
+        <a
+          onClick={handleListQueue}
+          style={{ color: "#4b86d2", cursor: "pointer" }}
+        >
+          <h4 className="title-name-home mt-3 mx-5">
+           รายการจองคิว
+          </h4>
+          
+        </a>
+        </div>
+      </div>
+      )}
+      {isLoggedIn && (
+        <div className="col">
+        <div className="Home-icon">
+        <FontAwesomeIcon
+          onClick={handleAllQueueList}
+          icon={faRectangleList}
+          class="fa-solid fa-rectangle-list"
+          style={{ color: "#4b86d2", marginTop: "60px", width : "80px" }}
+        /></div>
+        <div className="Nameicon">
+        <a
+          onClick={handleAllQueueList}
+          style={{ color: "#4b86d2", cursor: "pointer" }}
+        >
+          <h4 className="title-name-home mt-3 mx-5">
+          รายการคิวผู้ป่วยทั้งหมด
+          </h4>
+          
+        </a>
+        </div>
+      </div>
+      )}
+           
               
             </div>
           </div>
         </div>
       </div>
+     
       <div class="container5 p-5 my-5 border">
         <div className="d-flex justify-content-center ">
-          <div className="silder-home">
-            <div className="col-12 col-md-8 col-lg-10">
-              <Carousel variant="dark">
+          
+        <Carousel variant="dark">
                 <Carousel.Item>
-                  <img className="d-block w-100" src={sl1} alt="First slide" />
+                  <img className="d-block w-100" src={HomeSlide} alt="First slide" />
                 </Carousel.Item>
-                <Carousel.Item>
-                  <img className="d-block w-100" src={sl2} alt="Second slide" />
-                </Carousel.Item>
+                
               </Carousel>
-            </div>
-          </div>
+          
         </div>
         <div className="title-message">
           <h3>ข่าวสารประชาสัมพันธ์</h3>

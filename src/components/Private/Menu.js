@@ -29,7 +29,7 @@ export const Menu = [
     subMenu: [
       {
         id: 31,
-        title: 'รายชื่อผู้ป่วย',
+        title: 'รายชื่อผู้ใช้',
         icon: 'fa-solid fa-minus',
         pathname: '/admin/user',
       },
@@ -39,12 +39,7 @@ export const Menu = [
         icon: 'fa-solid fa-minus',
         pathname: '/admin/doctor',
       },
-      {
-        id: 32,
-        title: 'รายชื่อเจ้าหน้าที่',
-        icon: 'fa-solid fa-minus',
-        pathname: '/admin/authorities',
-      },
+     
       
     ],
   },

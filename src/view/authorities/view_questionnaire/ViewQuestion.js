@@ -36,7 +36,7 @@ function ViewQuestion() {
     const fetchData = async () => {
       try {
         const res1 = await axios.get(
-          `https://quaint-culottes-dove.cyclic.app/apis/questionaire`
+          `https://shy-jade-clownfish.cyclic.app/apis/questionaire`
         );
 
         console.log(res1);
@@ -80,7 +80,7 @@ function ViewQuestion() {
   useEffect(() => {
     axios
       // เรียกใช้ API เพื่อดึงข้อมูลจากฐานข้อมูล
-      .get("https://quaint-culottes-dove.cyclic.app/apis/questionaire")
+      .get("https://shy-jade-clownfish.cyclic.app/apis/questionaire")
       .then((res) => {
         console.log(res);
         setQuestionaire(res.data);
@@ -141,7 +141,7 @@ function ViewQuestion() {
             <div className="overflow">
               <table className="table table-bordered">
                 <thead>
-                  <tr className="ta1">
+                  <tr className="Taa1">
                     <th scope="col" style={{ width: "5%" }}>
                       #
                     </th>

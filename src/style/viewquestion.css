@@ -78,7 +78,7 @@
 .overflow {
   margin-top: 30px;
   border-radius: 10px;
-  width: 850px;
+  width: 780px;
   text-align: center;
   font-size: larger;
   color: hsl(0, 0%, 100%);
@@ -91,7 +91,7 @@
   color: hsl(0, 0%, 100%);
 }
 
-.ta1 {
+.Taa1 {
   color: hsl(0, 0%, 100%);
 
   background-color: rgb(16, 141, 83);

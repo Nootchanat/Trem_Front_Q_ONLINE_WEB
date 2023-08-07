@@ -1,0 +1,42 @@
+.show-data-container {
+    padding: 20px;
+  }
+  
+  .table-selector {
+    margin-bottom: 20px;
+  }
+  
+  .table-selector button {
+    padding: 8px 16px;
+    margin-right: 10px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .table-selector button.active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table thead {
+    background-color: #f8f9fa;
+  }
+  
+  .table th,
+  .table td {
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+    text-align: left;
+  }
+  
+  .table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }

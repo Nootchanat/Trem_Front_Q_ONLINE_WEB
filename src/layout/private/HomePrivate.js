@@ -35,10 +35,10 @@ function HomePrivate() {
     const fetchData = async () => {
       try {
         const res1 = await axios.get(
-          `https://quaint-culottes-dove.cyclic.app/apis/doctors`
+          `https://combative-buckle-moth.cyclic.app/apis/doctors`
         );
         const res2 = await axios.get(
-          `https://quaint-culottes-dove.cyclic.app/apis/departments`
+          `https://combative-buckle-moth.cyclic.app/apis/departments`
         );
 
         console.log(res1);
@@ -85,7 +85,7 @@ function HomePrivate() {
   useEffect(() => {
     axios
       // เรียกใช้ API เพื่อดึงข้อมูลจากฐานข้อมูล
-      .get("https://quaint-culottes-dove.cyclic.app/apis/patients")
+      .get("https://combative-buckle-moth.cyclic.app/apis/patients")
       .then((res) => {
         console.log(res);
         setPatients(res.data);
@@ -140,10 +140,10 @@ function HomePrivate() {
             </div>
           </div>
           <div className="connd">
-            <div className="overflow">
+            <div className="overflow2">
               <table className="table table-bordered">
                 <thead>
-                  <tr className="ta1">
+                  <tr className="ta2">
                     <th scope="col" style={{ width: "1%" }}>
                       #
                     </th>

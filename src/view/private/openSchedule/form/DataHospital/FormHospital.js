@@ -31,7 +31,7 @@ function FormHospital() {
 
   useEffect(() => {
     axios
-      .get("https://kind-red-centipede-cap.cyclic.app/apis/hospitals/" + 1)
+      .get("https://combative-buckle-moth.cyclic.app/apis/hospitals/" + 1)
       .then((res) => {
         console.log(res.data);
         sethospital_Logo(res.data.hospital_logo);

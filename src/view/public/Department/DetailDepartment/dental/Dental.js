@@ -17,6 +17,7 @@ function Dental() {
   const [doctor_image, setDoctor_Image] = useState([]);
   const [doctor_status, setDoctor_Status] = useState([]);
   const [doctor_phonenumber, setDoctor_Phonenumber] = useState([]);
+  const [department_phone, setDepartment_Phone] = useState([]);
   const [department_name, setDepartment_Name] = useState([]);
   const [open_time, setOpen_Time] = useState([]);
   const [close_time, setClose_Time] = useState([]);
@@ -29,7 +30,7 @@ function Dental() {
     const fetchData = async () => {
       try {
         const res1 = await axios.get(
-          "https://shy-jade-clownfish.cyclic.app/apis/doctors/depart/" +
+          "https://lazy-gray-shrimp-suit.cyclic.app/apis/doctors/depart/" +
           DId
         );
 
@@ -44,12 +45,14 @@ function Dental() {
         setDoctor_Status(res1.data.doctor_status);
         setDoctor_Phonenumber(res1.data.doctor_phonenumber);
 
+
         setDepartment_Name(departmentData.department_name);
-        setOpen_Time(res1.data.open_time);
-        setClose_Time(res1.data.close_time);
-        SetMax_Queue_Number(res1.data.max_queue_number);
-        setFloor(res1.data.floor);
-        SetBuilding(res1.data.building);
+        setDepartment_Phone(departmentData.department_phone)
+        setOpen_Time(departmentData.open_time);
+        setClose_Time(departmentData.close_time);
+        SetMax_Queue_Number(departmentData.max_queue_number);
+        setFloor(departmentData.floor);
+        SetBuilding(departmentData.building);
       } catch (error) {
         console.log(error);
       }
@@ -68,21 +71,20 @@ function Dental() {
       <div className="w-full mb-4" style={{ textAlign: "center" }}>
         <h4 className="centerdoctor">แพทย์ประจำแผนก</h4>
       </div>
+
       <div className="container45">
         <div className="row" >
           {doctors.map((doctor) =>
             doctor.doctor_status === "รับบริการ" ? (
-              <div className="card" key={doctor.id} style={{ width: "18rem", height: "580px" }}>
-                <div className="card_d">
-                  <Card.Img
+              <div className="card" key={doctor.id} style={{ width: "18rem", height: "300px" }}>
+                <div className="card_d ">
+                <div className="circular-image-container">
+                  <img
                     src={doctor.doctor_image}
                     alt="Doctor"
-                    className="img-d"
-                    style={{
-                      width: "180px",
-                      height: "190px"
-                    }}
+                    className="circular-image" 
                   />
+                  </div>
                 </div>
 
                 <div className="sta-card">
@@ -94,19 +96,20 @@ function Dental() {
                   </Card.Title>
                 </div>
 
-                <div className="sta-card-phone">
-                  <Card.Text className="card-text">
-                    เบอร์โทร: {doctor.doctor_phonenumber}
-                  </Card.Text>
-                </div>
-                
               </div>
 
             ) : null
           )}
         </div>
-
-        
+        <div className="depart-detail">
+          <div className="card">
+          <div className="depart-detail-title">สถานที่ตั้ง </div>
+          <div className="depart-buildind">อาคาร:&nbsp; {building} ชั้น:&nbsp; {floor}</div>
+          <div className="depart-opentime">เวลาเปิดทำการ  {open_time} : {close_time} น.</div>
+          <div className="depart-max">จำนวนคิวที่รับ :&nbsp; {max_queue_number} คิว</div>
+          <div className="depart-phone">ติดต่อแผนก :&nbsp; {department_phone }</div>
+        </div>
+        </div>
       </div>
     </div>
   );

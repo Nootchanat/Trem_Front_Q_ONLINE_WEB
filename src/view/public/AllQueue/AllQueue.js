@@ -3,7 +3,8 @@ import { Formik, Form } from "formik";
 
 import ShowData from "./ShowData";
 
-function MainDoctor() {
+function AllQueue() {
+    const [selectedDepartment, setSelectedDepartment] = useState("all");
   return (
     <Fragment>
       <div className="w-full">
@@ -11,7 +12,8 @@ function MainDoctor() {
           <nav aria-label="breadcrumb"></nav>
         </div>
         <div className="w-full mb-5">
-          <h2 className="title-content">ข้อมูลรายชื่อแพทย์</h2>
+          <h2 className="title-content">รายกาารจองคิวของผู้ป่วยทั้งหมด</h2>
+ 
         </div>
         <Formik>
           <Form>
@@ -25,4 +27,4 @@ function MainDoctor() {
   );
 }
 
-export default MainDoctor;
+export default AllQueue;

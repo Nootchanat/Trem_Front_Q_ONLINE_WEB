@@ -2,7 +2,7 @@
 
 
 .main-public-layout {
-  min-height: 120vh;
+  min-height: 150vh;
   position: relative;
   top: 130px;
   background-color: #E3F2FD;
@@ -112,7 +112,22 @@
 .containerProfile{
 
   position: absolute;
-  top: 370px;
+  top: 450px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background:#ffffff ;
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+
+  align-items: center;
+  
+  
+}
+.containerEditProfile{
+
+  position: absolute;
+  top: 550px;
   left: 50%;
   transform: translate(-50%, -50%);
   background:#ffffff ;

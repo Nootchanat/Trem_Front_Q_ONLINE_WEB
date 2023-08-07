@@ -1,31 +1,111 @@
 import React, { useState, useEffect } from "react";
-import { TextSelect } from "../../../../components/TextSelect";
-import PageSize from "../../../../data/pageSize.json";
+import Select from "react-select";
 import Pagination from "react-js-pagination";
 import { useNavigate } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import Swal from "sweetalert2";
-
-function ShowData({  pagin, changePage, changePageSize }) {
+import Table from "react-bootstrap/Table";
+import "../../../../style/showdoctor.css";
+function ShowData({ pagin, changePage, changePageSize }) {
   const navigate = useNavigate();
-  const [searchDoctor, setSearchDoctor] = useState(""); // เพิ่มตัวแปร searchDoctor เพื่อเก็บค่าค้นหาแพทย์
   const [doctors, setDoctors] = useState([]);
- 
+  const [pageData, setPageData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchDoctor, setSearchDoctor] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectStatus, setSelectStatus] = useState(null);
+  const [lockedDoctors, setLockedDoctors] = useState([]);
+
+  const getDoctors = async () => {
+    const response = await axios.get(
+      "https://lazy-gray-shrimp-suit.cyclic.app/apis/doctors"
+    );
+    setDoctors(response.data);
+  };
+
   useEffect(() => {
-    const fetchAllDoctors = async () => {
-      try {
-        const res = await axios.get("https://long-pear-hummingbird-kit.cyclic.app/apis/doctors");
-        setDoctors(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchAllDoctors();
+    getDoctors();
   }, []);
 
-  const filteredDoctors = doctors.filter((doctor) =>
-    doctor.doctor_first_name.toLowerCase().includes(searchDoctor.toLowerCase())
-  );
+  useEffect(() => {
+    const pagedatacount = Math.ceil(doctors.length / 10);
+    setPageCount(pagedatacount);
+
+    if (page) {
+      const LIMIT = pageSize;
+      const skip = LIMIT * (page - 1);
+      const dataToDisplay = doctors.filter((doctor) => {
+        const nameFilter =
+          doctor.doctor_first_name
+            .toLowerCase()
+            .includes(searchDoctor.toLowerCase()) ||
+          doctor.doctor_last_name
+            .toLowerCase()
+            .includes(searchDoctor.toLowerCase());
+
+        const departmentFilter =
+          !selectedDepartment ||
+          doctor.department_name === selectedDepartment.value;
+        const statusFilter =
+          !selectStatus || doctor.doctor_status === selectStatus.value;
+
+        return nameFilter && departmentFilter && statusFilter;
+      });
+
+      setPageData(dataToDisplay.slice(skip, skip + LIMIT));
+    }
+  }, [doctors, page, pageSize, searchDoctor, selectedDepartment, selectStatus]);
+
+  const handlePageSizeChange = (event) => {
+    const newPageSize = parseInt(event.target.value);
+    setPageSize(newPageSize);
+    setPage(1);
+  };
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    setSearchDoctor(query);
+  };
+
+  const handleCancelClick = () => {
+    setSearchDoctor("");
+    setSelectedDepartment(null);
+    setSelectStatus(null);
+    setPage(1);
+    setPageData(doctors.slice(0, pageSize));
+  };
+
+  
+  const getDepartmentOptions = () => {
+    const departments = Array.from(
+      new Set(doctors.map((doctor) => doctor.department_name))
+    );
+    return departments.map((department) => ({
+      value: department,
+      label: department,
+    }));
+  };
+
+  const handleSearchSelectChange = (selectedOption) => {
+    setSelectedDepartment(selectedOption);
+  };
+  const handleStatusSelectChange = (selectedOption) => {
+    setSelectStatus(selectedOption);
+  };
+
+  const getStatusOptions = () => {
+    const statuses = Array.from(
+      new Set(doctors.map((doctor) => doctor.doctor_status))
+    );
+    return statuses.map((status) => ({
+      value: status,
+      label: status,
+    }));
+  };
+
+
 
   const loadEdit = (id) => {
     navigate("/admin/doctor/form/" + id);
@@ -33,51 +113,97 @@ function ShowData({  pagin, changePage, changePageSize }) {
 
   const removeEmp = (doctor_id) => {
     Swal.fire({
-      title: "Confirm Delete",
-      text: "Do you want to delete this doctor?",
+      title: "ยืนยืน ",
+      text: "คุณต้องการลบ รายชื่อแพทย์?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Delete",
-      cancelButtonText: "Cancel",
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete("https://long-pear-hummingbird-kit.cyclic.app/apis/doctors/" + doctor_id)
+          .delete(
+            "http://localhost:5000/apis/doctors/" + doctor_id
+          )
           .then((res) => {
             Swal.fire({
-              title: "Deleted",
-              text: "The doctor has been deleted.",
-              icon: "success",
+              title: "ลบ",
+              text: "ลบแล้ว.",
+              icon: "สำเร็จ !!!",
+              timer: 1500,
             });
             window.location.reload();
           })
           .catch((error) => {
             Swal.fire({
               title: "Error",
-              text: "An error occurred while deleting the doctor.",
+              text: "เกิดข้อผิดพลาดขณะลบแพทย์.",
               icon: "error",
+              timer: 1500,
             });
           });
       }
     });
   };
-  
 
   return (
     <div className="w-full">
+      <div className="row">
+        <div className="col-5 col-md-2 col-lg-3">
+          <label>ค้นหา</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search..."
+            value={searchDoctor}
+            onChange={handleSearchChange}
+          />
+        </div>
+        <div className="col-12 col-md-3 col-lg-3">
+          <label>ค้นหาแผนก</label>
+          <Select
+            value={selectedDepartment}
+            options={getDepartmentOptions()}
+            onChange={handleSearchSelectChange}
+            placeholder="ค้นหาด้วยชื่อแผนก..."
+            isClearable={true}
+          />
+        </div>
+
+        <div className="col-12 col-md-3 col-lg-2">
+          <label>สถานะการใช้งาน </label>
+          <Select
+            value={selectStatus}
+            options={getStatusOptions()}
+            onChange={handleStatusSelectChange}
+            placeholder="ค้นหาด้วยสถานะ..	"
+            isClearable={true}
+          />
+        </div>
+        <div className="col-12 col-lg-3 pt-4">
+          <button
+            type="button"
+            className="btn btn-secondary ml-2"
+            onClick={handleCancelClick}
+          >
+            <i className="fa-solid fa-rotate-left mx-1"></i>
+            ล้างค่า
+          </button>
+        </div>
+      </div>
+
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
-          <TextSelect
-            id="pagesize"
-            name="pagesize"
-            options={PageSize}
-            value={PageSize.filter((a) => a.id === pagin.pageSize)}
-            onChange={(item) => {
-              changePageSize(item.id);
-            }}
-            getOptionLabel={(z) => z.label}
-            getOptionValue={(x) => x.id}
-          />
+          <select
+            class="form-select"
+            value={pageSize}
+            onChange={handlePageSizeChange}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={15}>15</option>
+            <option value={20}>20</option>
+          </select>
         </div>
         <div>
           <button
@@ -92,31 +218,32 @@ function ShowData({  pagin, changePage, changePageSize }) {
           </button>
         </div>
       </div>
+
+
+
       <div className="overflow-auto">
-        <table className="table">
+        <Table className="table">
           <thead>
             <tr className="table-success">
-              <th scope="col" style={{ width: "5%" }}>
+              <th scope="col" style={{ width: "3%" }}>
                 ลำดับ
               </th>
-              <th scope="col" style={{ width: "10%" }}>
+              <th scope="col" style={{ width: "5%" }}>
+                รูปภาพ
+              </th>
+              <th scope="col" style={{ width: "15%" }}>
                 คำนำหน้า
               </th>
               <th scope="col" style={{ width: "10%" }}>
                 ชื่อ
               </th>
-              <th scope="col" style={{ width: "10%" }}>
-                นามสกุล
-              </th>
               <th scope="col" style={{ width: "15%" }}>
-                รูป
+                นามสกุล
               </th>
               <th scope="col" style={{ width: "10%" }}>
                 สถานะการใช้งาน
               </th>
-              <th scope="col" style={{ width: "5%" }}>
-                เบอร์โทร
-              </th>
+
               <th scope="col" style={{ width: "10%" }}>
                 แผนก
               </th>
@@ -126,63 +253,71 @@ function ShowData({  pagin, changePage, changePageSize }) {
             </tr>
           </thead>
           <tbody>
-            {doctors.length === 0 ? (
-              <tr>
-                <td colSpan={5}>
-                  <div className="text-center text-danger">-- ไม่พบข้อมูล --</div>
-                </td>
-              </tr>
+            {pageData.length > 0 ? (
+              pageData.map((item, index) => {
+                return (
+                  <tr key={item.doctor_id}>
+                    <td>{(page - 1) * 10 + index + 1}</td>
+                    <td>
+                      <img className="img-d" src={item.doctor_image} />
+                    </td>
+                    <td>{item.prefix_name}</td>
+                    <td>{item.doctor_first_name}</td>
+                    <td>{item.doctor_last_name}</td>
+
+                    <td>
+                      {lockedDoctors.includes(item.doctor_id)
+                        ? "พักงาน"
+                        : item.doctor_status}
+                    </td>
+
+                    <td>{item.department_name}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn btn-warning text-white mx-1 mt-1"
+                        onClick={() => {
+                          loadEdit(item.doctor_id);
+                        }}
+                      >
+                        <i className="fa-solid fa-pen-to-square"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-danger text-white mx-1 mt-1"
+                        onClick={() => {
+                          removeEmp(item.doctor_id);
+                        }}
+                      >
+                        <i className="fa-solid fa-trash-can"></i>
+                      </button>
+                      
+                    </td>
+                  </tr>
+                );
+              })
             ) : (
-              doctors.map((item, index) => (
-                <tr key={item.doctor_id}>
-                  <td>{(pagin.currentPage - 1) * pagin.pageSize + (index + 1)}</td>
-                  <td>{item.prefix_name}</td>
-                  <td>{item.doctor_first_name}</td>
-                  <td>{item.doctor_last_name}</td>
-                  <td>
-                    <img className="img-hpt" src={item.doctor_image} />
-                  </td>
-                  <td>{item.doctor_status}</td>
-                  <td>{item.doctor_phonenumber}</td>
-                  <td>{item.department_name}</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="btn btn-warning text-white mx-1 mt-1"
-                      onClick={() => {
-                        loadEdit(item.doctor_id);
-                      }}
-                    >
-                      <i className="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-danger text-white mx-1 mt-1"
-                      onClick={() => {
-                        removeEmp(item.doctor_id);
-                      }}
-                    >
-                      <i className="fa-solid fa-trash-can"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))
+              <tr>
+              <td colSpan="8" className="text-center">
+                No doctors found.
+              </td>
+            </tr>
             )}
           </tbody>
-        </table>
+        </Table>
       </div>
       <div className="d-flex justify-content-between">
-        <div>จำนวน {pagin.totalRow} รายการ</div>
+        <div>จำนวน {doctors.length} รายการ</div>
         <div>
-          <Pagination
-            activePage={pagin.currentPage}
-            itemsCountPerPage={pagin.pageSize}
-            totalItemsCount={pagin.totalRow}
-            pageRangeDisplayed={pagin.totalPage}
-            onChange={(page) => {
-              changePage(page);
-            }}
-          />
+          <div className="Pagination">
+            <Pagination
+              activePage={page}
+              itemsCountPerPage={10}
+              totalItemsCount={doctors.length}
+              pageRangeDisplayed={10}
+              onChange={setPage}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import { useNavigate,useLocation } from 'react-router-dom';
 import { Formik, Form, ErrorMessage } from 'formik';
 
 
-import Schema from '../../../../authentication/register/Validation';
+
 
 import {  updateAuthorities, getDetailAuthorities, createAuthorities} from '../../../../../service/Authorities.Service';
 import { DropzoneImage } from '../../../../../components/DropzoneImage';
@@ -112,7 +112,7 @@ function FormAuthorities() {
         </div>
         <Formik
           enableReinitialize={true}
-          validationSchema={Schema}
+         
           initialValues={{
             image: detail ? (detail.path_image ? [`${baseURL}${detail.path_image}`] : []) : [],
             id_card: '',

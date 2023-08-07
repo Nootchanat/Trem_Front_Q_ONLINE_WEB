@@ -1,47 +1,55 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { TextSelect } from '../../../components/TextSelect';
-import PageSize from '../../../data/pageSize.json';
 import Pagination from 'react-js-pagination';
-import DateTh from '../../../components/DateTh';
-import StatusBook from '../../../data/statusBook.json';
 // import { useReactToPrint } from 'react-to-print';
 import MainPdf from '../history/pdf/MainPdf';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-
+import Spinner from "react-bootstrap/Spinner";
 
 
 function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, deleteData }) {
-  const [dataQ, setDataQ] = useState(null);
-  const [empData, setEmpData] = useState(null);
+  const [dataQ, setDataQ] = useState([]);
+  const [empData, setEmpData] = useState([]);
   const componentRef = useRef();
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    axios
-      .get("https://drab-tan-bluefish-tux.cyclic.app/apis/queue")
-      .then((res) => {
-        //console.log(res);
-        setEmpData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    if (dataQ) {
-    //   print();
-    }
-  }, [dataQ]);
+  const [pageData, setPageData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [pageSize, setPageSize] = useState(10); // Default page size is 5
 
-//   const print = useReactToPrint({
-//     content: () => componentRef.current,
-//     documentTitle: "Q_Online",
-//     pageStyle: pageStyle,
-//   });
+  
+  const getdataQ = async () => {
+    const response = await axios.get("http://localhost:5000/apis/queue");
+   setDataQ(response.data);
+  };
+
+  useEffect(() => {
+    getdataQ();
+  }, []);
+  const handlePageSizeChange = (event) => {
+    const newPageSize = parseInt(event.target.value);
+    setPageSize(newPageSize);
+    setPage(1); 
+  };
+
+  useEffect(() => {
+    const pagedatacount = Math.ceil(dataQ.length / 5);
+    setPageCount(pagedatacount);
+
+    if (page) {
+      const LIMIT = pageSize;
+
+      const skip = LIMIT * (page - 1);
+      const dataskip = dataQ.slice(skip, skip + LIMIT);
+      setPageData(dataskip);
+    }
+  }, [dataQ, page, pageSize]);
+ 
 
 
 const removeEmp =(queue_id)=>{
-  if(window.confirm("Do You Want To Delete This doctor?")){
-    axios.delete("https://drab-tan-bluefish-tux.cyclic.app/apis/queue/"+ queue_id)
+  if(window.confirm("คุณต้องการลบคิวนี้หรือไม่?")){
+    axios.delete("https://shy-jade-clownfish.cyclic.app/apis/queue/"+ queue_id)
     .then((res)=>{
       alert("Remove successfully.")
       window.location.reload()
@@ -52,17 +60,16 @@ const removeEmp =(queue_id)=>{
     <div className="w-full">
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
-          <TextSelect
-            id="pagesize"
-            name="pagesize"
-            options={PageSize}
-            value={PageSize.filter((a) => a.id === pagin.pageSize)}
-            onChange={(item) => {
-              changePageSize(item.id);
-            }}
-            getOptionLabel={(z) => z.label}
-            getOptionValue={(x) => x.id}
-          />
+        <select
+            class="form-select"
+            value={pageSize}
+            onChange={handlePageSizeChange}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={15}>15</option>
+            <option value={20}>20</option>
+          </select>
         </div>
       </div>
       <div className="overflow-auto">
@@ -73,10 +80,7 @@ const removeEmp =(queue_id)=>{
               คิวที่
               </th>
               <th scope="col" style={{ width: '20%' }}>
-              ชื่อผู้ป่วย
-              </th>
-              <th scope="col" style={{ width: '15%' }}>
-              เลขบัตรประชาชน
+              ชื่อ-สกุล
               </th>
               <th scope="col" style={{ width: '15%' }}>
               อาการเบื้องต้น
@@ -89,8 +93,11 @@ const removeEmp =(queue_id)=>{
               </br>
               ป/ด/ว
               </th>
-              <th scope="col" style={{ width: '10%' }}>
+              <th scope="col" style={{ width: '15%' }}>
               เวลาที่จอง
+              </th>
+              <th scope="col" style={{ width: '10%' }}>
+              สถานะคิว
               </th>
               <th scope="col" style={{ width: '5%' }}>
               แก้ไข
@@ -105,20 +112,18 @@ const removeEmp =(queue_id)=>{
             </tr>
           </thead>
           <tbody>
-              {empData &&
-                empData.map((item) => {
-                  return (
-                    <tr key={item.id}>
-                      <td>{item.queue_id}</td>
-                      <td>{item.first_name} {item.last_name}</td>
-                      <td>{item.id_card}</td>
-                      <td>{item.symptom}</td>
+          {pageData.length > 0 ? (
+              pageData.map((item, index) => {
+                return (
+                  <tr key={item.queue_id}>
+                    <td>{(page - 1) * 10 + index + 1}</td>
+                    
+                    <td>{item.prefix_name} {item.first_name} {item.last_name}</td>
+                    <td>{item.symptom}</td>
                       <td>{item.department_name}</td>
                       <td>{item.queue_date}</td>
-                      <td>{item.queue_date}</td>
-
-                      
-                      
+                      <td>{item.create_at}</td>
+                      <td>{item.queue_status_name}</td>
                       <td>
                         <button
                       type="button"
@@ -130,7 +135,6 @@ const removeEmp =(queue_id)=>{
                       <i className="fa-solid fa-pen-to-square"></i>
                     </button>
                     </td>
-
                     <td>
                       <a
                           className="btn btn-danger"
@@ -141,7 +145,8 @@ const removeEmp =(queue_id)=>{
                           <i className="fa-solid fa-trash-can"></i>
                         </a>
                     </td>
-                      <td>
+                    
+                    <td>
                       <a
                           className="btn btn-success"
                           style={{ float: "center" }}
@@ -151,69 +156,41 @@ const removeEmp =(queue_id)=>{
                           <i class="fa-solid fa-arrow-right"></i>
                         </a>
                     </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          <tbody>
-            {data.length === 0 ? (
-              <tr>
-                
-              </tr>
+                  </tr>
+                );
+              })
             ) : (
-              data.map((item, index) => (
-                <tr key={item.id}>
-                  <td>{(pagin.currentPage - 1) * pagin.pageSize + (index + 1)}</td>
-                  <td>{item.code}</td>
-                  <td>{item.fullname_doctor}</td>
-                  <td>{item.treatment_type_name}</td>
-                  <td>
-                    <DateTh date={item.created_date} />
-                  </td>
-                  <td>
-                    <DateTh date={item.open_date} />
-                  </td>
-                  <td>{item.number}</td>
-                  <td>
-                    <StatusBook status={item.status} />
-                  </td>
-                  <td>
-                    <button type="button" className='btn btn-info' onClick={() => {
-                      //print();
-                      setDataQ(item);
-                    }}
-                    >
-
-                      <i className="fa-solid fa-print text-white"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))
+              <div className="d-flex justify-content-center mt-4">
+                Loading... <Spinner animation="border" variant="danger" />
+              </div>
             )}
+         
           </tbody>
         </table>
       </div>
       <div className="d-flex justify-content-between">
-        <div>จำนวน {pagin.totalRow} รายการ</div>
+      <div>จำนวน {dataQ.length} รายการ</div>
         <div>
+          <div className="Pagination">
           <Pagination
-            activePage={pagin.currentPage}
-            itemsCountPerPage={pagin.pageSize}
-            totalItemsCount={pagin.totalRow}
-            pageRangeDisplayed={pagin.totalPage}
-            onChange={(page) => {
-              changePage(page);
-            }}
+           
+            activePage={page}
+            itemsCountPerPage={10}
+            totalItemsCount={dataQ.length}
+            pageRangeDisplayed={10}
+            onChange={setPage}
+            
           />
+          </div>
         </div>
-      </div>
-      <div className='d-flex justify-content-center'>
+        </div>
+      {/* <div className='d-flex justify-content-center'>
         <div className='hidden'>
           <div ref={componentRef}>
             <MainPdf dataQ={dataQ} />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

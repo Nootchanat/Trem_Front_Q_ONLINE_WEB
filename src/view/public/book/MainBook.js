@@ -1,389 +1,349 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Formik, Form } from 'formik'
-// import { TextSelect } from '../../../components/TextSelect';
-import ShowData from './ShowData';
-import ModalBook from './ModalBook';
-// import { getTreatmentTypeAll } from '../../../service/TreatmentType.Service'
-import { getOpenSchedulePublic } from '../../../service/OpenSchedule.Service'
+import React, { useEffect, useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import { Formik } from "formik";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { Button, Container, Box, Typography } from "@mui/material";
+import { styled } from "@mui/system";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import DateTh from "../../../components/DateTh";
 
-function MainBook() {
+const StyledContainer = styled(Container)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+
+const StyledBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const StyledButton = styled(Button)`
+  margin: 0.5rem;
+`;
+
+const MainBook = (props) => {
   const [show, setShow] = useState(false);
-  const [dataBook, setDataBook] = useState(null);
-  // const [dataTreatment, setDataTreatment] = useState([]);
-  const [data, setData] = useState([]);
-  const [pagin, setPagin] = useState({
-    totalRow: 1,
-    pageSize: 10,
-    currentPage: 1,
-    totalPage: 1,
+  const [userData, setUserData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  
+  const [queue, setQueue] = useState({
+   
+    queue_id:'',
+    create_at:'',
+    users_id: '',
+   
+    queue_date: "",
+    symptom:"",
+    queue_status_id: 1,
+    department_id: "",
+   
   });
-  const [dataSubmit, setDataSubmit] = useState({
-    search: '',
-    id_card: '',
-    prefix_name: '',
-    first_name: '',
-    last_name: '',
-    phoneNumber: '',
-    department_id: '',
-    symptom: ''
-  });
-
 
   useEffect(() => {
-    fetchData(10, 1, '', '', '', '');
-    // getTreatmentAll();
-  }, []);
+    // ตรวจสอบสถานะการล็อกอินเมื่อโหลดหน้า Profile
+    const storedUserData = localStorage.getItem("userData");
+    const storedIsLoggedIn = storedUserData ? true : false;
+    setIsLoggedIn(storedIsLoggedIn);
 
-    useEffect(() => {
-      if (dataBook) {
-        setShow(true);
-      } else {
-        setShow(false);
-      }
-    }, [dataBook])
+    if (storedIsLoggedIn) {
+      // ถ้าล็อกอินแล้ว ดึงข้อมูลผู้ใช้จาก localStorage
+      const userDataFromLocalStorage = JSON.parse(storedUserData);
+      setUserData(userDataFromLocalStorage);
+      axios
+      .get(
+        `https://lazy-gray-shrimp-suit.cyclic.app/apis/patients?id_card=${userDataFromLocalStorage.data.id_card}`
+      )
+      .then((response) => {
+        console.log("Response data:", response.data);
 
-  // // ฟังก์ชันดึงข้อมูลประเภทการรักษาทั้งหมด
-  // async function getTreatmentAll() {
-  //   let res = await getTreatmentTypeAll();
-  //   if (res) {
-  //     if (res.statusCode === 200 && res.taskStatus) {
-  //       res.data.unshift({ id: '', name: 'ทั้งหมด' });
-  //       setDataTreatment(res.data);
-  //     }
-  //   }
-  // }
+        const matchedUser = response.data.find(
+          (user) => user.id_card === userDataFromLocalStorage.data.id_card
+        );
 
-  async function fetchData(pageSize, currentPage, search, id_card, first_name ,last_name,
-    prefix_name, phoneNumber, department_id,symptom) {
-    let res = await getOpenSchedulePublic(pageSize, currentPage, search, id_card, first_name ,last_name,
-    prefix_name, phoneNumber, department_id,symptom);
-    if (res) {
-      if (res.statusCode === 200 && res.taskStatus) {
-        setData(res.data);
-        setPagin(res.pagin);
-      }
-    }
+        if (matchedUser) {
+          const { users_id, prefix_name, first_name, last_name, id_card } = matchedUser;
+          // อัปเดตข้อมูลใน state queue
+          setQueue((prevQueue) => ({
+            ...prevQueue,
+            users_id: users_id,
+          }));
+
+          // อัปเดตข้อมูลใน state userData
+          setUserData({
+            ...userData,
+            users_id: users_id,
+            prefix_name,
+            first_name,
+            last_name,
+            id_card,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
   }
+}, []);
 
 
+const handleChange = (e) => {
+  console.log("Input changed:", e.target.name, e.target.value);
+  // const value = e.target.name === "department_id" ? Number(e.target.value) : e.target.value;
+  setQueue((prevQueue) => ({
+    ...prevQueue,
+    [e.target.name]: e.target.value, // ใช้ computed property names เพื่ออัปเดตค่าของ property ใน state queue ที่ต้องการ
+  }));
+};
 
+
+  const handleBooking = async (e) => {
+  
+    e.preventDefault();
+    
+    const { users_id, first_name, last_name, department_id, queue_date, symptom } = queue;
+    try {
+      // ตรวจสอบความถูกต้องของข้อมูลที่ผู้ใช้กรอกเข้ามา
+      if (!queue.symptom || !queue.department_id || !queue.queue_date) {
+        Swal.fire({
+          icon: "error",
+          title: "กรุณากรอกข้อมูลให้ครบถ้วน",
+          showConfirmButton: true,
+        });
+        return;
+      } 
+     
+      const dataToSend = {
+        ...queue,
+        users_id,
+        first_name,
+        last_name,
+        department_id,
+        queue_date,
+        symptom,
+      }; 
+    
+      
+    
    
+      if (!users_id || isNaN(users_id)) {
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: "User ID ไม่ถูกต้อง",
+          showConfirmButton: true,
+        });
+        return;
+      }
+      // เพิ่มเงื่อนไขในการตรวจสอบว่าวันที่ที่เลือกไม่ใช่วันที่ย้อนหลัง
+      const currentDate = new Date();
+      const selectedDate = new Date(queue.queue_date);
+
+      if (selectedDate < currentDate) {
+        Swal.fire({
+          icon: "error",
+          title: "ไม่สามารถจองคิวในวันที่ย้อนหลังได้",
+          showConfirmButton: true,
+        });
+        return;
+      }
+
+      // แสดงตัวแจ้งเตือนสำหรับยืนยันการจองคิว
+      const result = await Swal.fire({
+        title: "ยืนยัน",
+        text: "คุณแน่ใจหรือไม่ ว่าต้องการจองคิว ?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      });
+
+      if (result.isConfirmed) {
+        try {
+          // ทำการจองคิวโดยส่งข้อมูลที่อยู่ในตัวแปร queue ไปยัง API สำหรับการจองคิว
+          await axios.post("http://localhost:5000/apis/queue",dataToSend);
+          
+         
+          // แสดงตัวแจ้งเตือนการจองคิวสำเร็จ
+          Swal.fire({
+            icon: "success",
+            title: "จองคิวสำเร็จ",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          navigate("/history/:users_id");
+
+          
+           // ทำการซ่อนป๊อปอัปการจองคิว
+      props.setShow(false);
+
+          // นำค่าที่ต้องการแสดงใน console.log
+          console.log("จองคิวสำเร็จ!");
+        } catch (error) {
+          console.log(error);
+          // แสดงตัวแจ้งเตือนเมื่อการจองคิวไม่สำเร็จ
+          Swal.fire({
+            icon: "error",
+            title: "การจองคิวไม่สำเร็จ",
+            text: "เกิดข้อผิดพลาดในการจองคิว กรุณาลองใหม่อีกครั้ง",
+            showConfirmButton: true,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      // แสดงตัวแจ้งเตือนเมื่อเกิดข้อผิดพลาด
+      Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: "เกิดข้อผิดพลาดในการเพิ่มข้อมูลผู้ใช้",
+        showConfirmButton: true,
+      });
+    }
+  };
+
+  const handlecloseLogin = () => {
+    navigate("/");
+  };
+
   return (
-    <Fragment>
-    <div className="w-full">
-    <div className="d-flex justify-content-center ">
-      <h2 className="title-content">จองคิว</h2>
-    </div>
-    <Formik
-    enableReinitialize={true}
-    // validationSchema={Schema}
-    initialValues={{
-      
-      id_card: '',
-      prefix_name: '',
-      first_name: '',
-      last_name: '',
-      phoneNumber: '',
-      department_id:'',
-      symptom:''
-      
-    }}onSubmit={(value) => {
-      console.log('submit :', value);
-      setDataSubmit(value);
-      fetchData(pagin.pageSize, 1, value.search, value.id_card, value.prefix_name, value.first_name, value.last_name,
-        value.phoneNumber, value.department_id, value.symptom);
-    }}
-  >
-        
-        {({ values, errors, touched, setFieldValue }) => (
+    <> {isLoggedIn && userData && (
+      <Modal show={props.show} onHide={() => props.setShow(false)} centered>
+        <Modal.Header onClick={handlecloseLogin} closeButton>
+          <Modal.Title style={{ width: "100%", textAlign: "center", fontSize: "25px" }}>
+            จองคิว
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Formik onSubmit={handleBooking}>
             <Form>
-            
-            
-                <div
-                  className="container4"
-                  style={{
-                    width: "950px",
-                    height: "400px",
-                    // border: "1px solid gray",
-                  }}
-                >
-                  <div className="col-12 col-12 px-1 mb-1 mt-3">
-                    <div className="row">
-                      
-                      <div className="col-6 px-1 mt-2">
-                        <label>เลขบัตรประชาชน</label>
-                        <label className="red">*</label>
-                        <input
-                          name="id_card"
-                          type="text"
-                          value={values.id_card}
-                          className={`form-input ${
-                            touched.id_card
-                              ? errors.id_card
-                                ? "invalid"
-                                : "valid"
-                              : ""
-                          }`}
-                          onChange={(e) => {
-                            setFieldValue("id_card", e.target.value);
-                          }}
-                        />
-                        {/* <ErrorMessage
-                          component="div"
-                          name="id_card"
-                          className="text-invalid"
-                        /> */}
-                      </div>
-                      <div className="col-6 px-1 mt-2">
-                          <label>เบอร์โทร</label>
-                          <label className="red">*</label>
-                          <input
-                            name="phoneNumber"
-                            type="text"
-                            value={values.phoneNumber}
-                            className={`form-input ${
-                              touched.phoneNumber
-                                ? errors.phoneNumber
-                                  ? "invalid"
-                                  : "valid"
-                                : ""
-                            }`}
-                            onChange={(e) => {
-                              setFieldValue("phoneNumber", e.target.value);
-                            }}
-                          />
-                          {/* <ErrorMessage
-                            component="div"
-                            name="phoneNumber"
-                            className="text-invalid"
-                          /> */}
-                        </div>
-                     
+              {isLoggedIn && userData && (
+                <div className="col-12">
+                  <div className="row">
+                    <div className="col-12 px-1 mt-1">
+                      <label
+                        className="label-content"
+                        style={{ textTransform: "uppercase", fontSize: "18px" }}
+                      >
+                        เลขบัตรประชาชน :{" "}
+                      </label>
+                      <label
+                        style={{ textTransform: "uppercase", fontSize: "18px" }}
+                        
+                      >
+                        {" "}
+                        {userData.id_card}
+                      </label>
+                    </div>
+                    <div className="col-12 px-1 mt-3">
+                      <label
+                        className="label-content"
+                        style={{ textTransform: "uppercase", fontSize: "18px" }}
+                      >
+                        ชื่อ :{" "}
+                      </label>
+                      <label
+                        style={{ textTransform: "uppercase", fontSize: "18px" }}
+                       
+                      >
+                        {" "}
+                        {userData.prefix_name} {userData.first_name} {userData.last_name}
+                      </label>
+                    </div>
 
-                      <div className="col-4 px-1 mt-2">
-                        <div class="form-row mt-4">
-                          <label>
-                            คำนำหน้าชื่อ{" "}
-                            <label className="red">* &nbsp;</label>:{" "}
-                          </label>{" "}
-                          &nbsp;
-                         {" "}
-                          <label> นาย</label>
-                          <input
-                            type="radio"
-                            id="mr"
-                            name="prefix_name"
-                            value={values.prefix_name}
-                            className={` ${
-                              touched.prefix_name
-                                ? errors.prefix_name
-                                  ? "invalid"
-                                  : "valid"
-                                : ""
-                            }`}
-                            onChange={(e) => {
-                              setFieldValue("prefix_name", e.target.value);
-                            }}
-                          />{" "}
-                          <label> นางสาว</label>
+                    <Form.Group className="col-12 px-1 mt-3">
+                      <Form.Label
+                        className="label-content"
+                        style={{ textTransform: "uppercase", fontSize: "18px" }}
+                      >
+                        อาการเบื้องต้น
+                      </Form.Label>
+                      <label className="red">*</label>
+                      <Form.Control
+                         name="symptom" // ต้องตรงกับชื่อใน state queue
+                         type="text"
+                         placeholder="กรุณาระบุอาการเบื้องต้น"
+                         value={queue.symptom}
+                         onChange={handleChange}
+                      />
+                    </Form.Group>
+                    <div className="col-6 px-1 mt-3">
+                      <label style={{ textTransform: "uppercase", fontSize: "18px" }}>
+                        แผนก
+                      </label>
+                      <label className="red">*</label>
 
-                          <input
-                            type="radio"
-                            id="ms"
-                            name="prefix_name"
-                            value={values.prefix_name}
-                            className={` ${
-                              touched.prefix_name
-                                ? errors.prefix_name
-                                  ? "invalid"
-                                  : "valid"
-                                : ""
-                            }`}
-                            onChange={(e) => {
-                              setFieldValue("prefix_name", e.target.value);
-                            }}
-                          />{" "}
-                          <label> นาง</label>
-                          <input
-                            type="radio"
-                            id="mrs"
-                            name="prefix_name"
-                            value={values.prefix_name}
-                            className={` ${
-                              touched.prefix_name
-                                ? errors.prefix_name
-                                  ? "invalid"
-                                  : "valid"
-                                : ""
-                            }`}
-                            onChange={(e) => {
-                              setFieldValue("prefix_name", e.target.value);
-                            }}
-                            />{" "}
-                        </div>
-
-                        {/* <ErrorMessage
-                          component="div"
-                          name="prefix_id"
-                          className="text-invalid"
-                        /> */}
-                      </div>
-
-                      <div className="col-4 px-1 mt-2">
-                        <label>ชื่อ</label>
-                        <label className="red">*</label>
-                        <input
-                          name="first_name"
-                          type="text"
-                          value={values.first_name}
-                          className={`form-input ${
-                            touched.first_name
-                              ? errors.first_name
-                                ? "invalid"
-                                : "valid"
-                              : ""
-                          }`}
-                          onChange={(e) => {
-                            setFieldValue("first_name", e.target.value);
-                          }}
-                        />
-                        {/* <ErrorMessage
-                          component="div"
-                          name="first_name"
-                          className="text-invalid"
-                        /> */}
-                      </div>
-
-                      <div className="col-4 px-1 mt-2">
-                        <label>นามสกุล</label>
-                        <label className="red">*</label>
-                        <input
-                          name="lastname"
-                          type="text"
-                          value={values.last_name}
-                          className={`form-input ${
-                            touched.last_name
-                              ? errors.last_name
-                                ? "invalid"
-                                : "valid"
-                              : ""
-                          }`}
-                          onChange={(e) => {
-                            setFieldValue("last_name", e.target.value);
-                          }}
-                        />
-                        {/* <ErrorMessage
-                          component="div"
-                          name="last_name"
-                          className="text-invalid"
-                        /> */}
-                      </div>
-                      
-                      
-                      
-
-                     
-
-                      <div className="col-6 px-1 mt-2">
-                        <label>อาการเบื้องต้น</label>
-                        <label className="red">*</label>
-                        <input
-                          name="symptom"
-                          type="text"
-                          value={values.symptom}
-                          className={`form-input ${
-                            touched.symptom
-                              ? errors.symptom
-                                ? "invalid"
-                                : "valid"
-                              : ""
-                          }`}
-                          onChange={(e) => {
-                            setFieldValue("symptom", e.target.value);
-                          }}
-                        />
-                         {/* <ErrorMessage
-                          component="div"
-                          name="symptom"
-                          className="text-invalid"
-                        /> */}
-                        </div>
-                        <div className="col-6 px-1 mt-2">
-                          <label>แผนก</label>
-                          <label className="red">*</label>
-
-                          <select
-                            class="form-select"
-                            aria-label="Default select example"
-                          >
-                           <option selected>เลือกแผนก</option>
-                            <option value="ทั่วไป">ทั่วไป</option>
-                            <option value="หัวใจ">หัวใจ</option>
-                            <option value="ทันตกรรม">ทันตกรรม</option>
-                            <option value="กุมารเวชกรรม">กุมารเวชกรรม</option>
-                            <option value="สูติ-นรีเวชกรรม">สูติ-นรีเวชกรรม</option>
-                            
-                          </select>
-                          {/* <ErrorMessage
+                      <select
+                        class="form-select"
+                        name="department_id"
+                        style={{ textTransform: "uppercase", fontSize: "18px" }}
+                        value={queue.department_id} // นำค่า department_id มาจากตัวแปร queue
+                        onChange={handleChange} // เรียกใช้ฟังก์ชัน handleChange เมื่อผู้ใช้เลือกแผนก
+                        aria-label="Default select example"
+                      >
+                        <option selected>เลือกแผนก</option>
+                        <option value="1">ทันตกรรม</option>
+                        <option value="2">กุมารเวช</option>
+                        <option value="3">ทั่วไป</option>
+                        <option value="4">สูติ-นรีเวช</option>
+                        <option value="6">ศัลยกรรม</option>
+                        <option value="7">หัวใจ</option>
+                        <option value="8">ผิวหนัง</option>
+                        <option value="23">จักษุ</option>
+                        <option value="26">ความงาม</option>
+                      </select>
+                      {/* <ErrorMessage
                             component="div"
                             name="department_id"
                             className="text-invalid"
                           /> */}
-                        </div>
-                        <div className="col-12 col-md-6 col-lg-3">
-                  <label>วันที่เปิดจองคิว</label>
-                  <input
-                    value={values.startDate}
-                    type="date"
-                    className="form-input"
-                    onChange={(e) => {
-                      setFieldValue('startDate', e.target.value);
-                    }}
-                  />
-                   </div>
                     </div>
-
-                    <div className="d-flex justify-content-center mt-3">
-                      <button type="submit" className="btn btn-primary mx-1">
-                        จองคิว
-                      </button>
-                      <button type="reset" className="btn btn-secondary mx-1">
-                        ล้างค่า
-                      </button>
+                    <div className="col-6 px-1 mt-3">
+                      <label style={{ textTransform: "uppercase", fontSize: "18px" }}>
+                        วันที่เข้ารับการรักษา
+                      </label>
+                      <label className="red">*</label>
+                      <input
+                        name="queue_date"
+                        type="date"
+                        style={{ textTransform: "uppercase", fontSize: "18px" }}
+                        className="form-input"
+                        value={queue.queue_date} // นำค่า queue_date มาจากตัวแปร queue
+                        onChange={handleChange} // เรียกใช้ฟังก์ชัน handleChange เมื่อผู้ใช้กรอกข้อมูล
+                      />
                     </div>
                   </div>
                 </div>
-                
-             
-            
-          </Form>
-            )}
-          
-        </Formik>
-    </div>
-    
-    <ModalBook
-        show={show}
-        setShow={setShow}
-        dataBook={dataBook}
-        setDataBook={setDataBook}
-        reload={() => {
-          fetchData(
-            pagin.pageSize, 
-            pagin.currentPage, 
-            dataSubmit.search, 
-            dataSubmit.id_card, 
-            dataSubmit.first_name, 
-            dataSubmit.last_name,
-            dataSubmit.prefix_name, 
-            dataSubmit.phoneNumber, 
-            dataSubmit.department_id, 
-            dataSubmit.symptom
-            );
-        }}
-      />
-    </Fragment>
-  )
-}
+              )}
+            </Form>
+          </Formik>
+        </Modal.Body>
+        <Modal.Footer>
+          <button type="button" className="btn btn-primary" onClick={handleBooking}>
+            จองคิว
+          </button>
+        </Modal.Footer>
+      </Modal>
+      
+        )}
+    </>
+  );
+};
 
-export default MainBook
+export default MainBook;

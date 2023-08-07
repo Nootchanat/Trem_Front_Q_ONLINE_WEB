@@ -8,9 +8,7 @@ import Swal from "sweetalert2";
 const Schema = Yup.object().shape({
   doctor_first_name: Yup.string().required("Please enter the first name"),
   doctor_last_name: Yup.string().required("Please enter the last name"),
-  doctor_phonenumber: Yup.string()
-  .required("Please enter the phone number")
-  .matches(/^[0-9]{10}$/, "Invalid phone number"),
+ 
 });
 function FormDoctor() {
   const location = useLocation();
@@ -23,6 +21,7 @@ function FormDoctor() {
     doctor_status: "",
     department_id: "",
     department_name: "",
+  
   });
   const { doctors_id } = useParams();
 
@@ -30,7 +29,7 @@ function FormDoctor() {
     const fetchAllDoctors = async () => {
       try {
         const res = await axios.get(
-          "https://long-pear-hummingbird-kit.cyclic.app/apis/doctors/" + doctors_id
+          "https://lazy-gray-shrimp-suit.cyclic.app/apis/doctors/" + doctors_id
         );
 
         setDoctors(res.data);
@@ -74,7 +73,7 @@ function FormDoctor() {
   
       if (result.isConfirmed) {
         const response = await axios.put(
-          `https://long-pear-hummingbird-kit.cyclic.app/apis/doctors/${doctors_id}`,
+          `https://lazy-gray-shrimp-suit.cyclic.app/apis/doctors/${doctors_id}`,
           doctor
         );
   
@@ -232,27 +231,6 @@ function FormDoctor() {
                       />
                       <ErrorMessage
                         name="doctor_last_name"
-                        component="div"
-                        className="error-message invalid-feedback"
-                      />
-                    </div>
-                    <div className="col-12 px-1 mt-2">
-                      <label>เบอร์โทร</label>
-                      <label className="red">*</label>
-                      <input
-                        name="doctor_phonenumber"
-                        type="text"
-                        value={doctor.doctor_phonenumber}
-                        className={`form-control ${
-                          touched.doctor_phonenumber &&
-                          errors.doctor_phonenumber &&
-                          "is-invalid"
-                        }`}
-                        
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage
-                        name="doctor_phonenumber"
                         component="div"
                         className="error-message"
                       />

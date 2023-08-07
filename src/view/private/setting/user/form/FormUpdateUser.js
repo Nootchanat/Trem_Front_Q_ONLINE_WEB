@@ -4,10 +4,10 @@ import Swal from "sweetalert2";
 import { useFormik, Formik, Form, ErrorMessage } from "formik";
 import Schema from "./Validation";
 import axios from "axios";
-import Select from "react-select";
+import address from "../../../../../data/address.json";
 
 
-function EditProfile() {
+function FormUpdateUser() {
   const location = useLocation();
   const navigate = useNavigate();
   const [originalBirthday, setOriginalBirthday] = useState(""); // ตัวแปรเก็บค่าวันเกิดเดิม
@@ -46,7 +46,7 @@ function EditProfile() {
     const fetchAllUsers = async () => {
       try {
         const res = await axios.get(
-          "https://lazy-gray-shrimp-suit.cyclic.app/apis/patients/" + users_id
+          "https://shy-jade-clownfish.cyclic.app/apis/patients/" + users_id
         );
 
         setUsers(res.data);
@@ -115,9 +115,8 @@ function EditProfile() {
 
       if (result.isConfirmed) {
         const { birthday, ...userData } = users; // ไม่รวม birthday ในการส่งข้อมูล
-
         const response = await axios.put(
-          `https://lazy-gray-shrimp-suit.cyclic.app/apis/patients/${users_id}`,
+          `https://shy-jade-clownfish.cyclic.app/apis/patients/${users_id}`,
           {
             ...userData,
             birthday: formatDate(users.birthday), // ส่งค่าวันเดือนใหม่ไปยัง API
@@ -131,7 +130,7 @@ function EditProfile() {
             showConfirmButton: false,
             timer: 2000,
           });
-          navigate("/Profile");
+          navigate("/admin/user");
         } else {
           Swal.fire({
             icon: "error",
@@ -188,8 +187,7 @@ function EditProfile() {
               <div className="container mt-2 ">
                 <div className="mb-4">
                   <div className="card border-0 shadow p-4">
-                    <h6 className="font ">ข้อมูลทั่วไป</h6>
-                    <br></br>
+                    <h6 className="font ">ข้อมูลทั่วไป</h6><br></br>
                     <div className="rounded border p-4">
                       <div className="row gx-3 gy-2 align-items-center">
                         <div className="col-4">
@@ -378,12 +376,11 @@ function EditProfile() {
                           />
                         </div>
 
-                        <div className="col-4 px-1 mt-2">
+                        <div className="col-sm-6">
                           <label>โรคประจำตัว</label>
-                          <label className="red">*</label>
+
                           <input
                             type="text"
-                            placeholder="โรคประจำตัว"
                             name="congenital_disease"
                             value={users.congenital_disease}
                             className="form-control"
@@ -402,7 +399,10 @@ function EditProfile() {
                             onChange={handleChange}
                           />
                         </div>
+                   
                       </div>
+                     
+                    
                       <h6>รหัสผ่าน</h6>
                       <div className="rounded border p-4">
                         <div className="col-8 ">
@@ -494,11 +494,8 @@ function EditProfile() {
                               </option>
                               <option value="บิดา">บิดา</option>
                               <option value="มารดา">มารดา</option>
-                              <option value="สามี">สามี</option>
-                              <option value="ภรรยา">ภรรยา</option>
                               <option value="พี่-น้อง">พี่-น้อง</option>
                               <option value="ญาติ">ญาติ</option>
-                           
                             </select>
                             <ErrorMessage
                               name="contact_relation_id"
@@ -682,7 +679,7 @@ function EditProfile() {
                           บันทึก
                         </button>
                         <button className="btn btn-danger mx-1 nav-breadcrumb ">
-                          <Link to="/profile" className="text-white">
+                          <Link to="/admin/user" className="text-white">
                             กลับ
                           </Link>
                         </button>
@@ -699,4 +696,4 @@ function EditProfile() {
   );
 }
 
-export default EditProfile;
+export default FormUpdateUser;
